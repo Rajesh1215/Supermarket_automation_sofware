@@ -1,0 +1,49 @@
+/* General styling */
+
+.main-product-component {
+
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+/* Specific section styling */
+
+.stock-product-activity {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.stock-activity,
+.product-verification,
+.product-add {
+  width: 45%;
+  margin: 10px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+.All-products{
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}

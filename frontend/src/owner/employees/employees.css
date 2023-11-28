@@ -1,0 +1,67 @@
+.employees-main-container {
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .search {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .search > input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .stats-salaries-commmunity,
+  .perfomances-works {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .stats-salaries-commmunity > div,
+  .perfomances-works > div {
+    width: 30%;
+    margin: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .employee-list > div {
+    width: 32%;
+    margin: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .stats-salaries-commmunity > div h2,
+  .perfomances-works > div h2,
+  .employee-list > div h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .stats-salaries-commmunity ul,
+  .perfomances-works ul,
+  .employee-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .stats-salaries-commmunity li,
+  .perfomances-works li,
+  .employee-list li {
+    margin-bottom: 5px;
+  }
+  

@@ -1,0 +1,105 @@
+.profile-main-container {
+
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .profile-performance {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .profile {
+    width: 30%;
+    margin: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .profile img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .profile-info {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .profile-info h2 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .performance {
+    width: 65%;
+    margin: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .performance ul {
+    list-style: none;
+    padding: 0
+  }
+  .alldetails-community {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .alldetails {
+    width: 45%;
+    margin: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .alldetails ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .alldetails li {
+    margin-bottom: 5px;
+  }
+  
+  .community {
+    width: 45%;
+    margin: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .community ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .community li {
+    margin-bottom: 5px;
+  }
+
+.activities{
+  margin: 10px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+    

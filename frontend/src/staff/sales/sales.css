@@ -1,0 +1,58 @@
+/* General styling */
+
+.sales-main-container {
+
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+
+/* Specific section styling */
+
+.sales-orders-details-returns-refunds-replacements {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sales-orders-details,
+.returns-refunds-replacements {
+  width: 45%;
+  margin: 10px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.add-orders {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.orders-list {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}

@@ -1,0 +1,96 @@
+/* Global Styles */
+
+.dashboard-main-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.common-component-prop {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.owner-filters {
+  background-color: #f8f9fa;
+  padding-bottom: 0px;
+}
+
+/* Top Section: Owner Filters */
+
+.owner-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.owner-filters h5 {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Sales, Orders, and Revenue Section */
+
+.sales-orders-revenue {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.sales, .orders, .revenue {
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Products Section */
+
+.products {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.products h5 {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.products-status, .returns-refunds {
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Recent Activity and Community Section */
+
+.recent-activity-community {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.recent-activity, .community {
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Charts Section */
+
+.charts {
+  height: 300px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}

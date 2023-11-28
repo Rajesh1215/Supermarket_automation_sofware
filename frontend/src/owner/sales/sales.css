@@ -1,0 +1,81 @@
+.sales-main-container {
+
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .sales-status {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .sales-status > div {
+    margin: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .sales-status > div h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .all-sales {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+  }
+  
+  .all-sales table {
+    width: 100%;
+  }
+  
+  .all-sales th,
+  .all-sales td {
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .product-performance {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+  }
+  
+  .product-performance h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .product-performance table {
+    width: 100%;
+  }
+  
+  .product-performance th,
+  .product-performance td {
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .charts {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+  }
+  
+  /* Place custom CSS for charts here */
+  
+  .charts > div {
+    margin: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  

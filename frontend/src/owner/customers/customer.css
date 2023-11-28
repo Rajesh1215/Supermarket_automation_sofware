@@ -1,0 +1,50 @@
+.customer-main-container {
+
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .search {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .search > input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .filters {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .filters > div {
+    margin: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .customer-list {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+  }
+  
+  .customer-list table {
+    width: 100%;
+  }
+  
+  .customer-list th,
+  .customer-list td {
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+  
