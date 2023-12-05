@@ -1,8 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import "./sales.css";
 const Sales = () => {
+  const navigate=useNavigate();
+  const gotopage=(str)=>{
+    navigate(str);
+  }
   return (
     <div className="sales-main-container">
+      <div onClick={()=>{gotopage("orders")}}>orders</div>
+      <div onClick={()=>{gotopage("returns")}}>returns</div>
       <div className="sales-status d-flex justify-content-between">
         <div>
           <h2>Total Sales: $50,000</h2>
