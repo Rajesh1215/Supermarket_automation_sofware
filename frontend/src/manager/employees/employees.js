@@ -1,6 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import "./employees.css";
 const Employees = () => {
+  const navigate = useNavigate();
+  const gotoemployeedet= ()=>{
+    navigate("employee-details");
+  }
+  const gotocommunity= ()=>{
+    navigate("/owner/community");
+  }
   return (
     <div className="employees-main-container">
       <div className="search d-flex justify-content-between align-items-center">
@@ -36,7 +44,7 @@ const Employees = () => {
           </ul>
         </div>
 
-        <div className="community">
+        <div className="community" onClick={gotocommunity}>
           <h2>Employee Community</h2>
           <ul>
             <li>Employee Satisfaction Rate: 85%</li>
@@ -85,7 +93,7 @@ const Employees = () => {
           </ul>
         </div>
 
-        <div className="staff">
+        <div className="staff" onClick={gotoemployeedet}>
           <h2>Staff</h2>
           <ul>
             <li>David Smith</li>

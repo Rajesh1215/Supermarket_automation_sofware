@@ -1,6 +1,11 @@
 import React from "react";
 import "./products.css"
+import { useNavigate } from "react-router";
 const Products = () => {
+  const navigate = useNavigate();
+  const Allcato = ()=>{
+    navigate("catogaries");
+  }
   return (
     <div className="main-product-component">
       <div className="search-component d-flex justify-content-between align-items-center">
@@ -57,6 +62,9 @@ const Products = () => {
       <div className="catogaries">
         {/* Category list or selection */}
         all catogaries
+        <div className="cato" onClick={Allcato}>
+          textils
+        </div>
       </div>
 
       <div className="High-trades">

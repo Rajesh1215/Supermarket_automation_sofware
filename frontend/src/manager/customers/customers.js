@@ -1,6 +1,11 @@
 import React from "react";
 import "./customer.css";
+import { useNavigate } from "react-router";
 const Customer = () => {
+  const navigate=useNavigate();
+  const gotocustomerdet=()=>{
+    navigate("customer-details");
+  }
   return (
     <div className="customer-main-container">
       <div className="search d-flex justify-content-between align-items-center">
@@ -51,7 +56,7 @@ const Customer = () => {
         </div>
       </div>
 
-      <div className="customer-list">
+      <div className="customer-list" onClick={gotocustomerdet}>
         <table className="table table-striped">
           <thead>
             <tr>

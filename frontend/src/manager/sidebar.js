@@ -7,22 +7,25 @@ const Sidebar = () => {
     <div className="sidebar">
       <ul>
         <li>
-          <Link to="/manager/">Dashboard</Link>
+          <Link to="/owner">Dashboard</Link>
         </li>
         <li>
-          <Link to="/manager/products">Products</Link>
+          <Link to="/owner/products">Products</Link>
         </li>
         <li>
-          <Link to="/manager/employees">Employees</Link>
+          <Link to="/owner/employees">Employees</Link>
         </li>
         <li>
-          <Link to="/manager/customers">Customers</Link>
+          <Link to="/owner/customers">Customers</Link>
         </li>
         <li>
-          <Link to="/manager/sales">Sales</Link>
+          <Link to="/owner/sales">Sales</Link>
         </li>
         <li>
-          <Link to="/manager/profile">Profile</Link>
+          <Link to="/owner/profile">Profile</Link>
+        </li>
+        <li>
+          <Link to="/owner/reports">Reports</Link>
         </li>
       </ul>
     </div>
