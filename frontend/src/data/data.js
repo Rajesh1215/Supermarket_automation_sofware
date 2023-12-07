@@ -1,6 +1,6 @@
+import React, { createContext, useContext, useState } from 'react';
 
-
-const employee = [
+const employees = [
     { user_id: 1, name: "Rajesh", dob: "1990-01-15", mail_id: "rajesh@example.com", password: "hashed_password", status: "active", performance: 90, leaves: 5, date_of_join: "2018-05-20" },
     { user_id: 2, name: "Sara", dob: "1988-07-25", mail_id: "sara@example.com", password: "hashed_password", status: "active", performance: 85, leaves: 3, date_of_join: "2019-02-10" },
     { user_id: 3, name: "John", dob: "1995-04-30", mail_id: "john@example.com", password: "hashed_password", status: "inactive", performance: 78, leaves: 8, date_of_join: "2017-09-15" },
@@ -11,9 +11,9 @@ const employee = [
     { user_id: 8, name: "Mia", dob: "1991-12-05", mail_id: "mia@example.com", password: "hashed_password", status: "inactive", performance: 75, leaves: 7, date_of_join: "2018-03-18" },
     { user_id: 9, name: "David", dob: "1989-08-28", mail_id: "david@example.com", password: "hashed_password", status: "active", performance: 87, leaves: 3, date_of_join: "2017-06-10" },
     { user_id: 10, name: "Sophie", dob: "1994-05-07", mail_id: "sophie@example.com", password: "hashed_password", status: "inactive", performance: 82, leaves: 5, date_of_join: "2016-09-28" },
-  ];
-  
-  const product_categories = [
+];
+
+const product_categories = [
     { product_category_id: 1, name: "Electronics" },
     { product_category_id: 2, name: "Textiles" },
     { product_category_id: 3, name: "Appliances" },
@@ -24,9 +24,9 @@ const employee = [
     { product_category_id: 8, name: "Sports" },
     { product_category_id: 9, name: "Stationery" },
     { product_category_id: 10, name: "Jewelry" },
-  ];
-  
-  const products = [
+];
+
+const products = [
     { product_id: 1, name: "Smartphone", product_category_id: 1, description: "High-end smartphone with advanced features", price: 699.99 },
     { product_id: 2, name: "Laptop", product_category_id: 1, description: "Powerful laptop for professional use", price: 1299.99 },
     { product_id: 3, name: "T-shirt", product_category_id: 2, description: "Cotton T-shirt for everyday wear", price: 19.99 },
@@ -37,9 +37,9 @@ const employee = [
     { product_id: 8, name: "Rice", product_category_id: 7, description: "High-quality Basmati rice for cooking", price: 9.99 },
     { product_id: 9, name: "Tennis Racket", product_category_id: 8, description: "Professional tennis racket for sports enthusiasts", price: 79.99 },
     { product_id: 10, name: "Notebook", product_category_id: 9, description: "Spiral-bound notebook for writing and drawing", price: 4.99 },
-  ];
-  
-  const test_upload_product = [
+];
+
+const test_upload_product = [
     { product_id: 11, name: "Test Product 1", product_category_id: 10, description: "This is a test product description", price: 29.99 },
     { product_id: 12, name: "Test Product 2", product_category_id: 1, description: "Another test product", price: 19.99 },
     { product_id: 13, name: "Test Product 3", product_category_id: 2, description: "Yet another test product", price: 24.99 },
@@ -50,9 +50,9 @@ const employee = [
     { product_id: 18, name: "Test Product 8", product_category_id: 7, description: "A different kind of test product", price: 19.99 },
     { product_id: 19, name: "Test Product 9", product_category_id: 8, description: "Testing product variations further", price: 29.99 },
     { product_id: 20, name: "Test Product 10", product_category_id: 9, description: "Final test product for now", price: 9.99 },
-  ];
-  
-  const product_items = [
+];
+
+const product_items = [
     { id: 1, product_id: 1, inventory_id: 1, damaged: 0, sold: 50 },
     { id: 2, product_id: 2, inventory_id: 2, damaged: 2, sold: 30 },
     { id: 3, product_id: 3, inventory_id: 3, damaged: 1, sold: 20 },
@@ -63,9 +63,9 @@ const employee = [
     { id: 8, product_id: 8, inventory_id: 8, damaged: 0, sold: 5 },
     { id: 9, product_id: 9, inventory_id: 9, damaged: 2, sold: 12 },
     { id: 10, product_id: 10, inventory_id: 10, damaged: 0, sold: 18 },
-  ];
-  
-  const inventory = [
+];
+
+const inventory = [
     { inventory_id: 1, product_id: 1, purchased_stock: 100, expiry: "2023-12-31", stock_expense: 2000.0, other_expense: 500.0, stock: 50, date_of_purchase: "2023-01-15" },
     { inventory_id: 2, product_id: 2, purchased_stock: 50, expiry: "2023-11-30", stock_expense: 1500.0, other_expense: 300.0, stock: 20, date_of_purchase: "2022-08-25" },
     { inventory_id: 3, product_id: 3, purchased_stock: 30, expiry: "2023-09-30", stock_expense: 500.0, other_expense: 100.0, stock: 10, date_of_purchase: "2023-04-18" },
@@ -76,9 +76,9 @@ const employee = [
     { inventory_id: 8, product_id: 8, purchased_stock: 90, expiry: "2023-11-10", stock_expense: 1600.0, other_expense: 200.0, stock: 70, date_of_purchase: "2022-12-05" },
     { inventory_id: 9, product_id: 9, purchased_stock: 25, expiry: "2023-10-05", stock_expense: 600.0, other_expense: 80.0, stock: 15, date_of_purchase: "2023-07-18" },
     { inventory_id: 10, product_id: 10, purchased_stock: 50, expiry: "2023-09-28", stock_expense: 1000.0, other_expense: 150.0, stock: 40, date_of_purchase: "2023-04-30" },
-  ];
-  
-  const order = [
+];
+
+const order = [
     { order_id: 1, total_price: 349.98, customer_id: 1 },
     { order_id: 2, total_price: 1599.98, customer_id: 2 },
     { order_id: 3, total_price: 59.97, customer_id: 3 },
@@ -89,9 +89,9 @@ const employee = [
     { order_id: 8, total_price: 199.95, customer_id: 8 },
     { order_id: 9, total_price: 249.98, customer_id: 9 },
     { order_id: 10, total_price: 69.97, customer_id: 10 },
-  ];
-  
-  const sales = [
+];
+
+const sales = [
     { sale_id: 1, order_id: 1, product_id: 1, quantity: 2, product_price: 699.99, total_amount: 1399.98 },
     { sale_id: 2, order_id: 2, product_id: 2, quantity: 1, product_price: 1299.99, total_amount: 1299.99 },
     { sale_id: 3, order_id: 3, product_id: 3, quantity: 3, product_price: 19.99, total_amount: 59.97 },
@@ -102,9 +102,9 @@ const employee = [
     { sale_id: 8, order_id: 8, product_id: 8, quantity: 3, product_price: 19.99, total_amount: 59.97 },
     { sale_id: 9, order_id: 9, product_id: 9, quantity: 1, product_price: 79.99, total_amount: 79.99 },
     { sale_id: 10, order_id: 10, product_id: 10, quantity: 2, product_price: 4.99, total_amount: 9.98 },
-  ];
-  
-  const customers = [
+];
+
+const customers = [
     { customer_id: 1, name: 'Michael Johnson', place: "New York", dob: "1982-03-15" },
     { customer_id: 2, name: 'Emily Davis', place: "Los Angeles", dob: "1990-12-22" },
     { customer_id: 3, name: 'Christopher Harris', place: "Chicago", dob: "1975-08-10" },
@@ -115,9 +115,9 @@ const employee = [
     { customer_id: 8, name: 'William Thomas', place: "San Diego", dob: "1980-07-08" },
     { customer_id: 9, name: 'Sophia Martinez', place: "Dallas", dob: "1991-01-25" },
     { customer_id: 10, name: 'Ethan Anderson', place: "San Jose", dob: "1984-06-30" },
-  ];
-  
-  const community_messages = [
+];
+
+const community_messages = [
     { message_id: 1, sender: 2, receiver: 1, viewed: false },
     { message_id: 2, sender: 3, receiver: 1, viewed: true },
     { message_id: 3, sender: 4, receiver: 2, viewed: false },
@@ -128,9 +128,9 @@ const employee = [
     { message_id: 8, sender: 9, receiver: 7, viewed: true },
     { message_id: 9, sender: 10, receiver: 8, viewed: false },
     { message_id: 10, sender: 1, receiver: 9, viewed: true },
-  ];
-  
-  const leaves = [
+];
+
+const leaves = [
     { date: "2023-02-28", employee_id: 1, reason: "Vacation" },
     { date: "2023-04-15", employee_id: 2, reason: "Sick Leave" },
     { date: "2023-06-20", employee_id: 3, reason: "Personal" },
@@ -141,9 +141,9 @@ const employee = [
     { date: "2024-03-05", employee_id: 8, reason: "Vacation" },
     { date: "2024-04-22", employee_id: 9, reason: "Sick Leave" },
     { date: "2024-06-18", employee_id: 10, reason: "Personal" },
-  ];
-  
-  const returns = [
+];
+
+const returns = [
     { return_id: 1, compensate: "replace", product_id: 3 },
     { return_id: 2, compensate: "refund", product_id: 6 },
     { return_id: 3, compensate: "replace", product_id: 8 },
@@ -154,9 +154,9 @@ const employee = [
     { return_id: 8, compensate: "refund", product_id: 9 },
     { return_id: 9, compensate: "replace", product_id: 1 },
     { return_id: 10, compensate: "refund", product_id: 4 },
-  ];
-  
-  const duties = [
+];
+
+const duties = [
     { staff_cat: "Sales", work: "Assist customers with product inquiries", employee_id: 1, status: "active" },
     { staff_cat: "Support", work: "Handle customer complaints and issues", employee_id: 2, status: "inactive" },
     { staff_cat: "Sales", work: "Promote new products to customers", employee_id: 3, status: "active" },
@@ -167,5 +167,56 @@ const employee = [
     { staff_cat: "Support", work: "Respond to customer inquiries via phone and email", employee_id: 8, status: "inactive" },
     { staff_cat: "Sales", work: "Meet monthly sales targets", employee_id: 9, status: "active" },
     { staff_cat: "Inventory", work: "Organize and categorize incoming inventory", employee_id: 10, status: "active" },
-  ];
-    
+];
+
+
+
+
+// Create a context for the user
+const UserContext = createContext();
+
+// Create a provider component
+export const UserProvider = ({ children }) => {
+    const [Employees, SetEmployees] = useState(employees);
+    const [Product_categories, SetProduct_categories] = useState(product_categories);
+    const [Products, SetProducts] = useState(products);
+    const [Test_upload_product, SetTest_upload_product] = useState(test_upload_product);
+    const [Product_items, SetProduct_items] = useState(product_items);
+    const [Inventory, SetInventory] = useState(inventory);
+    const [Order, SetOrder] = useState(order);
+    const [Sales, SetSales] = useState(sales);
+    const [Customers, SetCustomers] = useState(customers);
+    const [Community_messages, SetCommunity_messages] = useState(community_messages);
+    const [Leaves, SetLeaves] = useState(leaves);
+    const [Returns, SetReturns] = useState(returns);
+    const [Duties, SetDuties] = useState(duties);
+
+    return (
+        <UserContext.Provider value={{
+            Employees, SetEmployees,
+            Product_categories, SetProduct_categories,
+            Products, SetProducts,
+            Test_upload_product, SetTest_upload_product,
+            Product_items, SetProduct_items,
+            Inventory, SetInventory,
+            Order, SetOrder,
+            Sales, SetSales,
+            Customers, SetCustomers,
+            Community_messages, SetCommunity_messages,
+            Leaves, SetLeaves,
+            Returns, SetReturns,
+            Duties, SetDuties,
+        }}>        
+        {children}
+        </UserContext.Provider>
+    );
+};
+
+// Create a custom hook to consume the context
+export const useUserContext = () => {
+    const context = useContext(UserContext);
+    if (!context) {
+        throw new Error('useUserContext must be used within a UserProvider');
+    }
+    return context;
+};
