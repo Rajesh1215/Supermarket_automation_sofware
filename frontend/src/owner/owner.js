@@ -1,4 +1,5 @@
 // Owner.js
+import "./css/sidebar.css";
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from './dashboard/Dashboard';
@@ -25,7 +26,7 @@ const Owner = () => {
         <Col className='' sm={2}>
           <Sidebar />
         </Col>
-        <Col sm={10}>
+        <Col sm={10} className="my-4">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/products" element={<Products />} />

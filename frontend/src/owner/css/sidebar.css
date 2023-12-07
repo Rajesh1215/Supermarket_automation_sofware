@@ -1,13 +1,18 @@
 .sidebar {
-    background-color: #222;
-    color: #fff;
-    padding: 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: 100vh;
-    overflow-y: auto;
+  background-color: black;
+  color: white;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* Removed fixed width */
+  /* Width will be determined by parent element */
+  height: 100vh;
+  overflow-y: auto;
+}
+
+  .sidebar-containercol{
+    padding: 0 !important;
   }
   
   .sidebar ul {

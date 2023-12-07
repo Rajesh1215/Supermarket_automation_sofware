@@ -76,9 +76,6 @@
     box-shadow: 0px 2px 2px #999;
     padding: 10px;
   }
-  .instock-graph{
-    height: 40vh;
-  }
   .instock-heading{
     font-family: 'Open Sans', sans-serif;
     font-weight: bold;
@@ -122,39 +119,3 @@
     cursor: pointer;
   }
   
-.catogaries-accordion-item,.accordion-button{
-  background-color: white !important;
-}
-
-.accordian-bod{
-  height: 40vh;
-}
-.product-stats{
-  font-family: 'Pacifico', cursive;
-  margin: 5px 0;
-}
-.totals{
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  color: #212529;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.good-stock-products{
-  color: green;
-}
-.nearly-expiring-products{
-  color: orange;
-}
-.nearly-stock-out-products{
-  color: yellowgreen;
-}
-.expired-products{
-  color: brown;
-}
-.damaged-products{
-  color: black;
-}
-.out-of-stock-products{
-  color: red;
-}
