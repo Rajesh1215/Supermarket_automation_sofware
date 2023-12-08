@@ -1,10 +1,10 @@
 import React from "react";
-import { Row, Col, Card, Table } from "react-bootstrap";
+import { Row, Col, Card } from "react-bootstrap";
 
 const EmployeeDetails = () => {
   const employee = {
     name: "John Doe",
-    image: "https://via.placeholder.com/150",
+    image: "https://via.placeholder.com/400",
     performance: {
       projectsCompleted: 20,
       tasksCompleted: 150,
@@ -14,17 +14,14 @@ const EmployeeDetails = () => {
       position: "Software Engineer",
       department: "IT",
       hireDate: "2022-01-01",
+      salary: "$80,000", // New addition: Salary
     },
-    leaves: {
-      totalLeaves: 20,
-      remainingLeaves: 5,
-    },
-    status: "Active",
+
   };
 
   return (
-    <div>
-      <Row>
+    <div className="my-3">
+      <Row className="mb-5">
         <Col md={4}>
           <Card>
             <Card.Img variant="top" src={employee.image} />
@@ -33,44 +30,27 @@ const EmployeeDetails = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={8}>
-          <h2>Performance</h2>
-          <Table striped bordered>
-            <thead>
-              <tr>
-                <th>Projects Completed</th>
-                <th>Tasks Completed</th>
-                <th>Rating</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{employee.performance.projectsCompleted}</td>
-                <td>{employee.performance.tasksCompleted}</td>
-                <td>{employee.performance.rating}</td>
-              </tr>
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
-
-      <Row>
-        <Col md={4}>
+        <Col md={4} className="mt-3">
           <h2>Details</h2>
           <p>Position: {employee.details.position}</p>
           <p>Department: {employee.details.department}</p>
           <p>Hire Date: {employee.details.hireDate}</p>
+          <p>Salary: {employee.details.salary}</p> {/* New addition: Salary */}
         </Col>
-        <Col md={4}>
-          <h2>Leaves</h2>
-          <p>Total Leaves: {employee.leaves.totalLeaves}</p>
-          <p>Remaining Leaves: {employee.leaves.remainingLeaves}</p>
-        </Col>
-        <Col md={4}>
-          <h2>Status</h2>
-          <p>Status: {employee.status}</p>
-        </Col>
+        
       </Row>
+      <div className="works-assigned mx-2 mt-5 pt-2 pb-4 px-3 shadow rounded">
+        <h3>Works Assigned</h3>
+        <hr />
+
+      </div>
+      <div className="works-assigned m-2 pb-4 pt-2 px-3 shadow rounded">
+        <h3>Works Completed</h3>
+        <hr />
+      </div>
+
+      
+
     </div>
   );
 };

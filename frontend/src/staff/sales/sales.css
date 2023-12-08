@@ -1,4 +1,4 @@
-/* General styling */
+/* General styling
 
 .sales-main-container {
 
@@ -22,7 +22,7 @@ td {
 }
 
 
-/* Specific section styling */
+/* Specific section styling 
 
 .sales-orders-details-returns-refunds-replacements {
   display: flex;
@@ -55,4 +55,4 @@ td {
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 4px;
-}
+} */

@@ -1,7 +1,6 @@
 .customer-main-container {
 
-    border: 1px solid #ddd;
-    border-radius: 4px;
+
   }
   
   .search {
@@ -33,9 +32,8 @@
   }
   
   .customer-list {
-    border: 1px solid #ddd;
     border-radius: 4px;
-    padding: 20px;
+    padding: 10px;
   }
   
   .customer-list table {

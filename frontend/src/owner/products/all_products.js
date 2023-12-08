@@ -1,75 +1,149 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { Nav, Tab, Row, Col, Container } from "react-bootstrap";
+import { Nav, Tab, Row, Col, Container,Card } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch,faFilter } from "@fortawesome/free-solid-svg-icons";
+import { useUserContext } from "../../data/data";
+
+
 
 const AllProducts = () => {
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-  const goto_prodet=()=>{
+
+  const goto_prodet = () => {
     navigate("product_details");
-  }
-
-  const productsData = {
-    all: [
-      { id: 1, name: "Product A" },
-      { id: 2, name: "Product B" },
-      { id: 3, name: "Product C" },
-    ],
-    electronics: [
-      { id: 4, name: "Laptop" },
-      { id: 5, name: "Smartphone" },
-      { id: 6, name: "Camera" },
-    ],
-    clothing: [
-      { id: 7, name: "T-shirt" },
-      { id: 8, name: "Jeans" },
-      { id: 9, name: "Jacket" },
-    ],
-    books: [
-      { id: 10, name: "Book 1" },
-      { id: 11, name: "Book 2" },
-      { id: 12, name: "Book 3" },
-    ],
   };
-
+  const { Products } = useUserContext();
+  const { Product_categories } = useUserContext();
   const renderProducts = (category) => {
-    const selectedProducts = category === "all" ? productsData.all : productsData[category];
+    const selectedProducts = category === "all" ? Product_categories.all : Product_categories[category] || [];
 
     return (
       <Row>
         {selectedProducts.map((product) => (
           <Col key={product.id} sm={4}>
-            <div className="product-card">{product.name}</div>
+            <div className={`product-card ${product.status}`}>{product.name}</div>
           </Col>
         ))}
       </Row>
     );
   };
-
+  const FilterComponent = () => {
+    const [showFilters, setShowFilters] = useState(false);
+  
+    const toggleFilters = () => {
+      setShowFilters((prevShowFilters) => !prevShowFilters);
+    };
+  
+    const handleFilterClick = (filter) => {
+      // Handle filter selection here
+      console.log("Selected filter:", filter);
+    };
+  
+    const filterOptions = [
+      "In Stock",
+      "Nearly Out of Stock",
+      "Out of Stock",
+      "Nearly Expiring",
+      "Expired",
+      "Damaged",
+      "Returned",
+    ];
+  
+    return (
+      <div className=" my-3 mx-1 filter-container d-flex">
+        
+        <div className="filter-icon mx-1" onClick={toggleFilters}>
+          <FontAwesomeIcon icon={faFilter} />
+        </div>
+        <div className="filter-text" onClick={toggleFilters}>
+          Filter
+        </div>
+        {showFilters && (
+          <div className="filter-options d-flex">
+            {filterOptions.map((filter, index) => (
+              <div className=" mx-2" key={index} onClick={() => handleFilterClick(filter)}>
+                {filter}
+              </div>
+            ))}
+          </div>
+        )}
+        
+      </div>
+    );
+  };
+  const ProductCards = () => {
+    
+  
+    return (
+      <Row xs={1} md={2} lg={4} className="g-4">
+        {Products.map((product) => (
+          <Col key={product.id}>
+            <Card onClick={goto_prodet}>
+              <Card.Img variant="top" className=" " src={`https://via.placeholder.com/400x300`} />
+              <Card.Body>
+                <Card.Title>{product.name}</Card.Title>
+                <Card.Text>
+                  <strong>Price:</strong> ${product.price}
+                  <br />
+                  <strong>Items Present:</strong> {product.itemsPresent}
+                  <br />
+                  <strong>Expired:</strong> {product.expired}
+                  <br />
+                  <strong>Nearly Expired:</strong> {product.nearlyExpired}
+                  <br />
+                  <strong>Damaged:</strong> {product.damaged}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    );
+  };
   return (
-    <Container>
-      <h1>Product Categories</h1>
-      <Nav variant="tabs" activeKey={activeTab} onSelect={(tab) => handleTabClick(tab)}>
-        {Object.keys(productsData).map((category) => (
-          <Nav.Item key={category}>
-            <Nav.Link eventKey={category}>
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </Nav.Link>
-          </Nav.Item>
-        ))}
-      </Nav>
-      <Tab.Content>
-        {Object.keys(productsData).map((category) => (
-          <Tab.Pane key={category} eventKey={category}>
-            {renderProducts(category)}
-          </Tab.Pane>
-        ))}
-      </Tab.Content>
-      <div className="product-det" onClick={goto_prodet}> seeproduct</div>
-    </Container>
+    <div>
+      <div className="search-component d-flex justify-content-between ">
+        <div className="search-input mx-3 my-1">
+          <FontAwesomeIcon icon={faSearch} className="ml-2 mx-2" />
+          <input type="text" className="border-0" placeholder="Search Products" />
+        </div>
+        <div className="products-num-stats d-flex justify-content-around">
+          <div className="products-purchase mx-3">• Purchased:200</div>
+          <div className="products-sold mx-3">• Sold:100</div>
+          <div className="products-stock mx-3">• In Stock:100</div>
+        </div>
+      </div>
+      <Container>
+        <Nav variant="tabs" className="mx-5" activeKey={activeTab} onSelect={(tab) => handleTabClick(tab)}>
+          {Product_categories.map((category) => (
+            <Nav.Item key={category.product_category_id}>
+              <Nav.Link eventKey={category.name.toLowerCase()}>
+                {category.name}
+              </Nav.Link>
+            </Nav.Item>
+          ))}
+        </Nav>
+        <FilterComponent />
+        <Tab.Content>
+          
+          {Product_categories.map((category) => (
+            <div>
+            <Tab.Pane key={category.product_category_id} eventKey={category.name.toLowerCase()}>
+              {renderProducts(category.name.toLowerCase())}
+            </Tab.Pane>
+            
+            </div>
+          ))}
+        </Tab.Content>
+        <ProductCards />
+      </Container>
+    </div>
   );
 };
 

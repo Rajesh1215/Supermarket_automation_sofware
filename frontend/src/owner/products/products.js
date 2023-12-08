@@ -5,9 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Button, Accordion } from "react-bootstrap";
 import { useUserContext } from "../../data/data.js";
-import { Chart, ArcElement } from "chart.js";
-import DoughnutChart from "./doughnut.js";
-Chart.register(ArcElement);
+import DoughnutChart from "../charts/doughnut.js";
+
 
 const Products = () => {
   const navigate = useNavigate();
@@ -44,8 +43,11 @@ const Products = () => {
                 <div className="expired-products product-stats"> ■ 10 products with 100 items -products</div>
                 <div className="damaged-products product-stats"> ■ 2 products with 3 items damaged</div>
                 <div className="out-of-stock-products product-stats"> ■ 30 products out of stock</div>
+                <Button className="mx-2" >See Reports </Button>
+          <Button onClick={Allcato}>See Products </Button>
               </div>
           </div>
+          
             {/* You can add additional content for each category here */}
             {/* For example, display products related to the category */}
           </Accordion.Body>
@@ -71,19 +73,8 @@ const Products = () => {
           <div className="products-stock mx-3">• In Stock:100</div>
         </div>
       </div>
-      <div className="product-page-buttons row">
-        <div className="col-lg-2 col-md-2 col-sm-6 ">
-          <Button>See all products</Button>
-        </div>
-        <div className="col-lg-2 col-md-2 col-sm-6">
-          <Button>Add Stock</Button>
-        </div>
-        <div className="col-lg-2 col-md-2 col-sm-6">
-          <Button>Add New product</Button>
-        </div>
-      </div>
-
-      <div className="product-statuses row flex-wrap ">
+      
+      <div className="product-statuses row flex-wrap align-items-center">
         <div className="col-4 instock">
           <div className="instock-heading mx-4">In Stock</div>
           <hr />
@@ -116,7 +107,7 @@ const Products = () => {
             </div>
           </div>
 
-          <div className="-products">
+          <div className="expired">
             <div className="instock-heading mx-2">Expires, Damages</div>
             <hr />
             <div className="">
@@ -127,16 +118,28 @@ const Products = () => {
         </div>
         <div className="col-5 instock-graph d-flex justify-content-center"><DoughnutChart/></div>
       </div>
+      <div className="product-page-buttons row">
+        <div className="col-lg-2 col-md-2 col-sm-6 ">
+          <Button>See all products</Button>
+        </div>
+        <div className="col-lg-2 col-md-2 col-sm-6">
+          <Button>Add Stock</Button>
+        </div>
+        <div className="col-lg-2 col-md-2 col-sm-6">
+          <Button>Add New product</Button>
+        </div>
+        <div className="col-lg-2 col-md-2 col-sm-6">
+          <Button>View All Reports</Button>
+        </div>
+      </div>
+
       <div className="catogaries my-3 p-3 mx-2">
         <h3 className="all-catogaries-heading">All categories</h3>
         {/* Category list or selection */}
         <div className="accordion">{renderCategories()}</div>
-        <div className="cato" onClick={Allcato}>
-          textils
-        </div>
       </div>
 
-      <div className="High-trades">
+      <div className="High-trades ">
         {/* Top-selling products section */}
         high trades
       </div>

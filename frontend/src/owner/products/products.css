@@ -37,11 +37,12 @@
   }
   .search-input {
     position: relative; /* This is needed for the bottom border to work properly */
-    border-bottom: 1px solid transparent; /* This sets a transparent border by default */
+    border-bottom: 3px solid #919090; /* This changes the border color to #ddd on hover */
+    border-bottom: 1px solid  ; /* This sets a transparent border by default */
     transition: border-bottom 0.3s ease-in-out; /* This adds a smooth transition for the border */
   }
   .search-input:hover {
-    border-bottom: 1px solid #919090; /* This changes the border color to #ddd on hover */
+    border-bottom: 3px solid black; /* This changes the border color to #ddd on hover */
   }
   .search-input input {
     border: none; /* This removes the default border of the input field */
@@ -76,7 +77,7 @@
     box-shadow: 0px 2px 2px #999;
     padding: 10px;
   }
-  .instock-graph{
+  .instock-graph,.instock{
     height: 40vh;
   }
   .instock-heading{

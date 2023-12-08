@@ -26,35 +26,6 @@ const Customer = () => {
         </div>
       </div>
 
-      <div className="filters d-flex flex-wrap justify-content-between">
-        <div>
-          <label for="orderStatus">Order Status:</label>
-          <select className="form-select" id="orderStatus">
-            <option value="all">All Orders</option>
-            <option value="pending">Pending</option>
-            <option value="processing">Processing</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="purchaseAmount">Purchase Amount:</label>
-          <input
-            type="number"
-            className="form-control"
-            id="purchaseAmount"
-            placeholder="Min Purchase Amount"
-          />
-          <input
-            type="number"
-            className="form-control"
-            id="purchaseAmount"
-            placeholder="Max Purchase Amount"
-          />
-        </div>
-      </div>
 
       <div className="customer-list" onClick={gotocustomerdet}>
         <table className="table table-striped">

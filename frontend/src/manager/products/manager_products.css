@@ -1,23 +1,24 @@
-.main-product-components {
+/*
+/*.main-product-components {
   margin: 3px;
   }
   .search-component {
     margin-bottom: 20px;
   }
   .products-purchase {
-    color: #4c57af; /* green */
+    color: #4c57af;  green 
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
     font-size: smaller;
   }
   .products-sold {
-    color: #FF9800; /* orange */
+    color: #FF9800;  orange 
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
     font-size: smaller;
   }
   .products-stock {
-    color: #009688; /* teal */
+    color: #009688; /* teal 
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
     font-size: smaller;
@@ -36,16 +37,16 @@
     border-radius: 4px;
   }
   .search-input {
-    position: relative; /* This is needed for the bottom border to work properly */
-    border-bottom: 1px solid transparent; /* This sets a transparent border by default */
-    transition: border-bottom 0.3s ease-in-out; /* This adds a smooth transition for the border */
+    position: relative; /* This is needed for the bottom border to work properly 
+    border-bottom: 1px solid transparent; /* This sets a transparent border by default 
+    transition: border-bottom 0.3s ease-in-out; /* This adds a smooth transition for the border 
   }
   .search-input:hover {
-    border-bottom: 1px solid #919090; /* This changes the border color to #ddd on hover */
+    border-bottom: 1px solid #919090; /* This changes the border color to #ddd on hover 
   }
   .search-input input {
-    border: none; /* This removes the default border of the input field */
-    background-color: transparent; /* This makes the input field transparent */
+    border: none; /* This removes the default border of the input field 
+    background-color: transparent; /* This makes the input field transparent 
     outline: none;
   }
   .product-stock-details{
@@ -60,7 +61,7 @@
     box-shadow:4px;
   }
   
-/*stock details*/
+/*stock details
 
   .product-statuses{
     display: flex;
@@ -88,7 +89,7 @@
     color: rgb(74, 69, 121); 
   }
 
-  /*catogary acordian*/
+  /*catogary acordian
 .all-catogaries-heading{
   font-family: 'Open Sans', sans-serif;
 
@@ -119,3 +120,4 @@
     cursor: pointer;
   }
   
+*/
