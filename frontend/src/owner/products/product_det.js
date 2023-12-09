@@ -1,5 +1,5 @@
-import React from "react";
-import { Carousel, Image, Row, Col, ListGroup, ListGroupItem } from "react-bootstrap";
+import React,{useState} from "react";
+import { Carousel, Image, Row, Col, ListGroup, ListGroupItem,Button,Modal,Form } from "react-bootstrap";
 
 const ProductDetails = ({ product }) => {
   const {
@@ -14,6 +14,36 @@ const ProductDetails = ({ product }) => {
   } = product;
 
   const { present, expired, expiring, damaged, returned } = inventory;
+
+  const [showSeeItems, setShowSeeItems] = useState(false);
+  const handleshowSeeItems = () => setShowSeeItems(true);
+  const handleCloseModals = () => {
+    setShowSeeItems(false);};
+
+    const SeeItems = ({ show, handleClose }) => {
+      return (
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Stock</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {/* Add stock form */}
+            <Form>
+              {/* Include form fields for adding stock */}
+              {/* For example, product selection, quantity, etc. */}
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary">
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      );
+    };
 
   return (
     <div className="product-details">
@@ -66,6 +96,7 @@ const ProductDetails = ({ product }) => {
           
         </Col>
         <Col >
+        <Button onClick={handleshowSeeItems}>See Items</Button>
         <hr />
           <h3>Product Specifications</h3>
           <ListGroup>
@@ -86,6 +117,7 @@ const ProductDetails = ({ product }) => {
           <p>{description}</p>
         </Col>
       </Row>
+      <SeeItems show={showSeeItems} handleClose={handleCloseModals} />
     </div>
   );
 };

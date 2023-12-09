@@ -13,7 +13,7 @@ import Orders from "./sales/orders";
 import Returns from "./sales/returns";
 import Allproducts from "./products/all_products";
 import EmployeeDetails from './employees/empolyee_det';
-import Productdet from "./products/product_det"
+import ProductDetailsExample from "./products/product_det"
 import Community from './employees/community';
 import CustomerPage from './customers/customer_det';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -30,7 +30,7 @@ const Owner = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/catogaries" element={<Allproducts />} />
-            <Route path="/products/catogaries/product_details" element={<Productdet />} />
+            <Route path="/products/catogaries/product_details" element={<ProductDetailsExample />} />
             <Route path="/employees" element={<Employees />} /> {/* Add the forward slash here */}
             <Route path="/employees/employee-details" element={<EmployeeDetails />} />
             <Route path="/community" element={<Community />} />

@@ -1,14 +1,43 @@
-import React from "react";
+import React,{useState} from "react";
 import { useNavigate } from "react-router";
 import "./sales.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "react-bootstrap";
+import { Button,Form,Modal } from "react-bootstrap";
 const Sales = () => {
   const navigate = useNavigate();
   const gotopage = (str) => {
     navigate(str);
   };
+  const [showAddorder, setShowAddorder] = useState(false);
+  const handleshowAddorder = () => setShowAddorder(true);
+  const handleCloseModals = () => {
+    setShowAddorder(false);};
+
+    const Addorder = ({ show, handleClose }) => {
+      return (
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Stock</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {/* Add stock form */}
+            <Form>
+              {/* Include form fields for adding stock */}
+              {/* For example, product selection, quantity, etc. */}
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary">
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      );
+    };
   return (
     <div className="sales-main-container my-3">
       <div className="search-component d-flex justify-content-between ">
@@ -22,7 +51,7 @@ const Sales = () => {
         </div>
       </div>
       <div className="row">
-      <Button className="col-2 mx-2" >Add Orders</Button>
+      <Button className="col-2 mx-2 " onClick={handleshowAddorder} >Add Orders</Button>
       <Button className="col-2" onClick={()=>{gotopage("returns")}}>View Returns</Button>
       </div>
       <div className="mt-5 mb-1">
@@ -83,7 +112,9 @@ const Sales = () => {
           </tbody>
         </table>
       </div>
+      <Addorder show={showAddorder} handleClose={handleCloseModals} />
     </div>
+
   );
 };
 

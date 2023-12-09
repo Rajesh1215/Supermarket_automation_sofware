@@ -1,9 +1,9 @@
-import React from "react";
+import React,{useState} from "react";
 import "./products.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Button, Accordion } from "react-bootstrap";
+import { Button, Accordion , Modal ,Form } from "react-bootstrap";
 import { useUserContext } from "../../data/data.js";
 import DoughnutChart from "../charts/doughnut.js";
 
@@ -54,6 +54,86 @@ const Products = () => {
         </Accordion.Item>
       </Accordion>
     ));
+  };
+  const [showAddStockModal, setShowAddStockModal] = useState(false);
+  const [showAddProductModal, setShowAddProductModal] = useState(false);
+  const [showSeePurchasesModal, setShowSeePurchasesModal] = useState(false);
+
+  const handleAddStockClick = () => setShowAddStockModal(true);
+  const handleAddProductClick = () => setShowAddProductModal(true);
+  const handleSeePurchasesClick = () => setShowSeePurchasesModal(true);
+
+  const handleCloseModals = () => {
+    setShowAddStockModal(false);
+    setShowAddProductModal(false);
+    setShowSeePurchasesModal(false);
+  };
+
+  const SeePurchasesModal = ({ show, handleClose }) => {
+    return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>See Purchases</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Display information related to purchases */}
+          {/* For example, a table of purchase history */}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  const AddProductModal = ({ show, handleClose }) => {
+    return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Add new product form */}
+          <Form>
+            {/* Include form fields for adding a new product */}
+            {/* For example, product name, category, price, etc. */}
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary">
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  const AddStockModal = ({ show, handleClose }) => {
+    return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Stock</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Add stock form */}
+          <Form>
+            {/* Include form fields for adding stock */}
+            {/* For example, product selection, quantity, etc. */}
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary">
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
   };
 
   return (
@@ -119,17 +199,20 @@ const Products = () => {
         <div className="col-5 instock-graph d-flex justify-content-center"><DoughnutChart/></div>
       </div>
       <div className="product-page-buttons row">
+      
+      
+      
         <div className="col-lg-2 col-md-2 col-sm-6 ">
-          <Button>See all products</Button>
+          <Button onClick={Allcato}>See all products</Button>
         </div>
         <div className="col-lg-2 col-md-2 col-sm-6">
-          <Button>Add Stock</Button>
+        <Button onClick={handleAddStockClick}>Add Stock</Button>
         </div>
         <div className="col-lg-2 col-md-2 col-sm-6">
-          <Button>Add New product</Button>
+        <Button onClick={handleAddProductClick}>Add New Product</Button>
         </div>
         <div className="col-lg-2 col-md-2 col-sm-6">
-          <Button>View All Reports</Button>
+        <Button onClick={handleSeePurchasesClick}>See Purchases</Button>
         </div>
       </div>
 
@@ -148,6 +231,10 @@ const Products = () => {
         recents
         {/* Recently added or updated products section */}
       </div>
+            {/* Modals */}
+      <AddStockModal show={showAddStockModal} handleClose={handleCloseModals} />
+      <AddProductModal show={showAddProductModal} handleClose={handleCloseModals} />
+      <SeePurchasesModal show={showSeePurchasesModal} handleClose={handleCloseModals} />
     </div>
   );
 };

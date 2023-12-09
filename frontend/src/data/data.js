@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useState } from 'react';
 
 const employees = [
-    { user_id: 1, name: "Rajesh", dob: "1990-01-15", mail_id: "rajesh@example.com", password: "hashed_password", status: "owner", performance: 90, leaves: 5, date_of_join: "2018-05-20" },
-    { user_id: 2, name: "Sara", dob: "1988-07-25", mail_id: "sara@example.com", password: "hashed_password", status: "manager", performance: 85, leaves: 3, date_of_join: "2019-02-10" },
-    { user_id: 3, name: "John", dob: "1995-04-30", mail_id: "john@example.com", password: "hashed_password", status: "supervisor", performance: 78, leaves: 8, date_of_join: "2017-09-15" },
-    { user_id: 4, name: "Alice", dob: "1992-11-08", mail_id: "alice@example.com", password: "hashed_password", status: "supervisor", performance: 92, leaves: 2, date_of_join: "2020-01-12" },
-    { user_id: 5, name: "Bob", dob: "1987-06-20", mail_id: "bob@example.com", password: "hashed_password", status: "staff", performance: 80, leaves: 6, date_of_join: "2016-07-05" },
-    { user_id: 6, name: "Eva", dob: "1993-09-18", mail_id: "eva@example.com", password: "hashed_password", status: "staff", performance: 88, leaves: 4, date_of_join: "2019-08-22" },
-    { user_id: 7, name: "Alex", dob: "1985-03-12", mail_id: "alex@example.com", password: "hashed_password", status: "staff", performance: 95, leaves: 1, date_of_join: "2015-11-30" },
-    { user_id: 8, name: "Mia", dob: "1991-12-05", mail_id: "mia@example.com", password: "hashed_password", status: "staff", performance: 75, leaves: 7, date_of_join: "2018-03-18" },
-    { user_id: 9, name: "David", dob: "1989-08-28", mail_id: "david@example.com", password: "hashed_password", status: "staff", performance: 87, leaves: 3, date_of_join: "2017-06-10" },
-    { user_id: 10, name: "Sophie", dob: "1994-05-07", mail_id: "sophie@example.com", password: "hashed_password", status: "staff", performance: 82, leaves: 5, date_of_join: "2016-09-28" },
+    { user_id: 1,username:"raj17", name: "Rajesh", dob: "1990-01-15", mail_id: "rajesh@example.com", password: "hashed_password", status: "owner", performance: 90, leaves: 5, date_of_join: "2018-05-20" },
+    { user_id: 2,username:"jn7", name: "Sara", dob: "1988-07-25", mail_id: "sara@example.com", password: "hashed_password", status: "manager", performance: 85, leaves: 3, date_of_join: "2019-02-10" },
+    { user_id: 3,username:"kjn9", name: "John", dob: "1995-04-30", mail_id: "john@example.com", password: "hashed_password", status: "supervisor", performance: 78, leaves: 8, date_of_join: "2017-09-15" },
+    { user_id: 4,username:"ijn9", name: "Alice", dob: "1992-11-08", mail_id: "alice@example.com", password: "hashed_password", status: "supervisor", performance: 92, leaves: 2, date_of_join: "2020-01-12" },
+    { user_id: 5,username:"gb7", name: "Bob", dob: "1987-06-20", mail_id: "bob@example.com", password: "hashed_password", status: "staff", performance: 80, leaves: 6, date_of_join: "2016-07-05" },
+    { user_id: 6,username:"jk8", name: "Eva", dob: "1993-09-18", mail_id: "eva@example.com", password: "hashed_password", status: "staff", performance: 88, leaves: 4, date_of_join: "2019-08-22" },
+    { user_id: 7,username:"jhhj8", name: "Alex", dob: "1985-03-12", mail_id: "alex@example.com", password: "hashed_password", status: "staff", performance: 95, leaves: 1, date_of_join: "2015-11-30" },
+    { user_id: 8,username:"hunu8", name: "Mia", dob: "1991-12-05", mail_id: "mia@example.com", password: "hashed_password", status: "staff", performance: 75, leaves: 7, date_of_join: "2018-03-18" },
+    { user_id: 9,username:"jki9", name: "David", dob: "1989-08-28", mail_id: "david@example.com", password: "hashed_password", status: "staff", performance: 87, leaves: 3, date_of_join: "2017-06-10" },
+    { user_id: 10,username:"ijn9", name: "Sophie", dob: "1994-05-07", mail_id: "sophie@example.com", password: "hashed_password", status: "staff", performance: 82, leaves: 5, date_of_join: "2016-09-28" },
 ];
 
 const product_categories = [
@@ -66,16 +66,16 @@ const product_items = [
 ];
 
 const inventory = [
-    { inventory_id: 1, product_id: 1, purchased_stock: 100, expiry: "2023-12-31", stock_expense: 2000.0, other_expense: 500.0, stock:100, date_of_purchase: "2023-01-15" },
-    { inventory_id: 2, product_id: 2, purchased_stock:100, expiry: "2023-11-30", stock_expense: 1500.0, other_expense: 300.0, stock:100, date_of_purchase: "2022-08-25" },
-    { inventory_id: 3, product_id: 3, purchased_stock:100, expiry: "2023-09-30", stock_expense: 500.0, other_expense: 100.0, stock:100, date_of_purchase: "2023-04-18" },
-    { inventory_id: 4, product_id: 4, purchased_stock:100, expiry: "2023-10-15", stock_expense: 1800.0, other_expense: 400.0, stock:100, date_of_purchase: "2023-04-18" },
-    { inventory_id: 5, product_id: 5, purchased_stock:100, expiry: "2023-11-20", stock_expense: 1200.0, other_expense: 200.0, stock:100, date_of_purchase: "2023-03-10" },
-    { inventory_id: 6, product_id: 6, purchased_stock: 100, expiry: "2023-09-15", stock_expense: 2500.0, other_expense: 300.0, stock:100, date_of_purchase: "2023-06-28" },
-    { inventory_id: 7, product_id: 7, purchased_stock:100, expiry: "2023-12-31", stock_expense: 800.0, other_expense: 100.0, stock:100, date_of_purchase: "2023-02-10" },
-    { inventory_id: 8, product_id: 8, purchased_stock:100, expiry: "2023-11-10", stock_expense: 1600.0, other_expense: 200.0, stock:100, date_of_purchase: "2022-12-05" },
-    { inventory_id: 9, product_id: 9, purchased_stock:100, expiry: "2023-10-05", stock_expense: 600.0, other_expense: 80.0, stock:100, date_of_purchase: "2023-07-18" },
-    { inventory_id: 10, product_id: 10, purchased_stock:100, expiry: "2023-09-28", stock_expense: 1000.0, other_expense: 150.0, stock:100, date_of_purchase: "2023-04-30" },
+    { inventory_id: 1, product_id: 1,stock_status:"not in stock", purchased_stock: 100, expiry: "2023-12-31", stock_expense: 2000.0, other_expense: 500.0, stock:100, date_of_purchase: "2023-01-15" },
+    { inventory_id: 2, product_id: 2,stock_status:" in stock", purchased_stock:100, expiry: "2023-11-30", stock_expense: 1500.0, other_expense: 300.0, stock:100, date_of_purchase: "2022-08-25" },
+    { inventory_id: 3, product_id: 3,stock_status:" in stock", purchased_stock:100, expiry: "2023-09-30", stock_expense: 500.0, other_expense: 100.0, stock:100, date_of_purchase: "2023-04-18" },
+    { inventory_id: 4, product_id: 4,stock_status:" in stock", purchased_stock:100, expiry: "2023-10-15", stock_expense: 1800.0, other_expense: 400.0, stock:100, date_of_purchase: "2023-04-18" },
+    { inventory_id: 5, product_id: 5,stock_status:"not in stock", purchased_stock:100, expiry: "2023-11-20", stock_expense: 1200.0, other_expense: 200.0, stock:100, date_of_purchase: "2023-03-10" },
+    { inventory_id: 6, product_id: 6,stock_status:"not in stock", purchased_stock: 100, expiry: "2023-09-15", stock_expense: 2500.0, other_expense: 300.0, stock:100, date_of_purchase: "2023-06-28" },
+    { inventory_id: 7, product_id: 7,stock_status:"sold", purchased_stock:100, expiry: "2023-12-31", stock_expense: 800.0, other_expense: 100.0, stock:100, date_of_purchase: "2023-02-10" },
+    { inventory_id: 8, product_id: 8,stock_status:"sold", purchased_stock:100, expiry: "2023-11-10", stock_expense: 1600.0, other_expense: 200.0, stock:100, date_of_purchase: "2022-12-05" },
+    { inventory_id: 9, product_id: 9,stock_status:"sold", purchased_stock:100, expiry: "2023-10-05", stock_expense: 600.0, other_expense: 80.0, stock:100, date_of_purchase: "2023-07-18" },
+    { inventory_id: 10, product_id: 10,stock_status:"not in stock", purchased_stock:100, expiry: "2023-09-28", stock_expense: 1000.0, other_expense: 150.0, stock:100, date_of_purchase: "2023-04-30" },
 ];
 
 const order = [
@@ -157,16 +157,16 @@ const returns = [
 ];
 
 const duties = [
-    { staff_cat:"", work: "Assist customers with product inquiries", employee_id: 1, status: "active" },
-    { staff_cat: "Support", work: "Handle customer complaints and issues", employee_id: 2, status: "inactive" },
-    { staff_cat: "Sales", work: "Promote new products to customers", employee_id: 3, status: "active" },
-    { staff_cat: "Inventory", work: "Manage stock levels and order new inventory", employee_id: 4, status: "active" },
-    { staff_cat: "Support", work: "Provide technical support to customers", employee_id: 5, status: "inactive" },
-    { staff_cat: "Sales", work: "Conduct sales presentations", employee_id: 6, status: "active" },
-    { staff_cat: "Inventory", work: "Inspect and manage product quality", employee_id: 7, status: "active" },
-    { staff_cat: "Support", work: "Respond to customer inquiries via phone and email", employee_id: 8, status: "inactive" },
-    { staff_cat: "Sales", work: "Meet monthly sales targets", employee_id: 9, status: "active" },
-    { staff_cat: "Inventory", work: "Organize and categorize incoming inventory", employee_id: 10, status: "active" },
+    { staff_cat:"", work: "Assist customers with product inquiries", employee_id: 1, status: "active",deadline:"" },
+    { staff_cat: "Support", work: "Handle customer complaints and issues", employee_id: 2, status: "inactive",deadline:"" },
+    { staff_cat: "Sales", work: "Promote new products to customers", employee_id: 3, status: "active",deadline:"" },
+    { staff_cat: "Inventory", work: "Manage stock levels and order new inventory", employee_id: 4, status: "active",deadline:"" },
+    { staff_cat: "Support", work: "Provide technical support to customers", employee_id: 5, status: "inactive",deadline:"" },
+    { staff_cat: "Sales", work: "Conduct sales presentations", employee_id: 6, status: "active",deadline:"" },
+    { staff_cat: "Inventory", work: "Inspect and manage product quality", employee_id: 7, status: "active",deadline:"" },
+    { staff_cat: "Support", work: "Respond to customer inquiries via phone and email", employee_id: 8, status: "inactive",deadline:"" },
+    { staff_cat: "Sales", work: "Meet monthly sales targets", employee_id: 9, status: "active",deadline:"" },
+    { staff_cat: "Inventory", work: "Organize and categorize incoming inventory", employee_id: 10, status: "active",deadline:"" },
 ];
 
 

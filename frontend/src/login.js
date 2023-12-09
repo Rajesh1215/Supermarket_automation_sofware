@@ -1,89 +1,109 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Form, Button, Dropdown } from 'react-bootstrap';
 import { useUserContext } from './data/data';
+import { useNavigate } from 'react-router-dom';
 
-const UserRoleSelection = () => {
+const Login = () => {
   const context = useUserContext();
-  const [userRole, setUserRole] = useState('');
-  const [selectedEmployee, setSelectedEmployee] = useState('');
   const navigate = useNavigate();
 
-  const handleUserRoleChange = (event) => {
-    setUserRole(event.target.value);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [selectedRole, setSelectedRole] = useState('');
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
   };
 
-  const handleEmployeeChange = (event) => {
-    setSelectedEmployee(event.target.value);
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleRoleSelect = (role) => {
+    setSelectedRole(role);
+  };
+
+  const handleLogin = (event) => {
     event.preventDefault();
 
-    // Assuming that you have an array of employees in your context named Employees
-    const selectedEmployeeData = context.Employees.find(
-      (employee) => employee.name === selectedEmployee
-    );
+    if (username.trim() !== '' && password.trim() !== '' && selectedRole !== '') {
+      // Set user data in context (modify as per your user data structure)
+      context.setUser({
+        username,
+        password, // Note: In a real app, you should never store passwords in plain text
+        role: selectedRole,
+        // Add other user data as needed
+      });
 
-    context.setUser({
-      username: selectedEmployeeData.name,
-      status: userRole,
-      id:selectedEmployeeData.user_id,
-    });
-
-    switch (userRole) {
-      case 'owner':
-        navigate('/owner');
-        break;
-      case 'manager':
-        navigate('/manager');
-        break;
-      case 'supervisor':
-        navigate('/supervisor');
-        break;
-      case 'staff':
-        navigate('/staff');
-        break;
-      default:
-        alert('Please select a valid user role.');
+      // Navigate based on the selected role
+      switch (selectedRole) {
+        case 'owner':
+          navigate('/owner');
+          break;
+        case 'manager':
+          navigate('/manager');
+          break;
+        case 'supervisor':
+          navigate('/supervisor');
+          break;
+        case 'staff':
+          navigate('/staff');
+          break;
+        default:
+          alert('Please select a valid user role.');
+      }
+    } else {
+      alert('Please enter a valid username, password, and select a role.');
     }
   };
 
-  // Assuming that you have an array of employees in your context named Employees
-  const employeeNames = context.Employees
-    .filter((employee) => employee.status === userRole)
-    .map((employee) => employee.name);
-
   return (
-    <div className="user-role-selection-container">
-      <h2>Select Your User Role</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="userRole">User Role:</label>
-        <select id="userRole" value={userRole} onChange={handleUserRoleChange}>
-          <option value="">Select Role</option>
-          <option value="owner">Owner</option>
-          <option value="manager">Manager</option>
-          <option value="supervisor">Supervisor</option>
-          <option value="staff">Staff</option>
-        </select>
+    <div className="login-container">
+      <h2>Login</h2>
+      <Form onSubmit={handleLogin}>
+        <Form.Group controlId="username">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter your username"
+            value={username}
+            onChange={handleUsernameChange}
+            required
+          />
+        </Form.Group>
 
-        {userRole && (
-          <>
-            <label htmlFor="employee">Select Employee:</label>
-            <select id="employee" value={selectedEmployee} onChange={handleEmployeeChange}>
-              <option value="">Select Employee</option>
-              {employeeNames.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </>
-        )}
+        <Form.Group controlId="password">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={handlePasswordChange}
+            required
+          />
+        </Form.Group>
 
-        <button type="submit">Next</button>
-      </form>
+        <Form.Group controlId="role">
+          <Form.Label>User Role</Form.Label>
+          <Dropdown className='my-3' onSelect={(eventKey) => handleRoleSelect(eventKey)}>
+            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+              {selectedRole ? selectedRole : 'Select Role'}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item eventKey="owner">Owner</Dropdown.Item>
+              <Dropdown.Item eventKey="manager">Manager</Dropdown.Item>
+              <Dropdown.Item eventKey="supervisor">Supervisor</Dropdown.Item>
+              <Dropdown.Item eventKey="staff">Staff</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Form.Group>
+
+        <Button variant="primary" type="submit">
+          Login
+        </Button>
+      </Form>
     </div>
   );
 };
 
-export default UserRoleSelection;
+export default Login;

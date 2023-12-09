@@ -1,9 +1,10 @@
-import React from "react";
-import { Button } from "react-bootstrap";
+import React,{useState} from "react";
+import { Button,Modal,Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { useUserContext } from "../../data/data";
+import "./register.css";
 import BarChart from "../charts/charts";
 
 const Employees = () => {
@@ -14,9 +15,7 @@ const Employees = () => {
     navigate("employee-details");
   };
 
-  const gotoCommunity = () => {
-    navigate("/owner/community");
-  };
+
 
   // Filter employees based on their positions
   const managers = Employees.filter(
@@ -42,6 +41,86 @@ const Employees = () => {
           <p>Performance Index: {employee.performance}</p>
         </div>
       </div>
+    );
+  };
+  const [showSeemore, setShowSeemore] = useState(false);
+  const [showAddEmployee, setShowAddEmployee] = useState(false);
+  const [showAssignTasks, setShowAssignTasks] = useState(false);
+
+  const handleshowSeemore = () => setShowSeemore(true);
+  const handleshowAddEmployee = () => setShowAddEmployee(true);
+  const handleshowAssignTasks = () => setShowAssignTasks(true);
+
+  const handleCloseModals = () => {
+    setShowSeemore(false);
+    setShowAddEmployee(false);
+    setShowAssignTasks(false);
+  };
+
+  const AssignTasks = ({ show, handleClose }) => {
+    return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>See Purchases</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Display information related to purchases */}
+          {/* For example, a table of purchase history */}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  const AddEmployee = ({ show, handleClose }) => {
+    return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Add new product form */}
+          <Form>
+            {/* Include form fields for adding a new product */}
+            {/* For example, product name, category, price, etc. */}
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary">
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  const Seemore = ({ show, handleClose }) => {
+    return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Stock</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Add stock form */}
+          <Form>
+            {/* Include form fields for adding stock */}
+            {/* For example, product selection, quantity, etc. */}
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary">
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     );
   };
 
@@ -92,13 +171,16 @@ const Employees = () => {
           <hr />
           {/* Add your performance charts here */}
           {/* Example: <PerformanceCharts /> */}
-          <Button>See More</Button>
+          <div className="d-flex m-2">
+          <Button className="mx-3" onClick={handleshowSeemore}>See More</Button>
+          <Button onClick={handleshowAssignTasks}>Assign a task</Button>
+          </div>
         </div>
       </div>
       <div className="">
         <div className="d-flex mt-5 mx-5 justify-content-between border-0 ">
         <h2>Employees</h2>
-        <Button onClick={gotoCommunity}>View commmunity</Button>
+        <Button onClick={handleshowAddEmployee}>Add Employee</Button>
         </div>
       <hr />
       <div className="employee-list mx-3 w-100">
@@ -127,6 +209,9 @@ const Employees = () => {
         </div>
       </div>
       </div>
+      <AssignTasks show={showAssignTasks} handleClose={handleCloseModals} />
+      <AddEmployee show={showAddEmployee} handleClose={handleCloseModals} />
+      <Seemore show={showSeemore} handleClose={handleCloseModals} />
     </div>
   );
 };

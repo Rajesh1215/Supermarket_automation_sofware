@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { Nav, Tab, Row, Col, Container,Card } from "react-bootstrap";
+import { Nav,Button,Modal,Form, Tab, Row, Col, Container,Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch,faFilter } from "@fortawesome/free-solid-svg-icons";
 import { useUserContext } from "../../data/data";
-
-
 
 const AllProducts = () => {
   const [activeTab, setActiveTab] = useState("all");
@@ -20,6 +18,37 @@ const AllProducts = () => {
   };
   const { Products } = useUserContext();
   const { Product_categories } = useUserContext();
+
+  const [showVerifiesItems, setShowVerifiesItems] = useState(false);
+  const handleshowVerifiesItems = () => setShowVerifiesItems(true);
+  const handleCloseModals = () => {
+    setShowVerifiesItems(false);};
+
+    const VerifiesItems = ({ show, handleClose }) => {
+      return (
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Stock</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {/* Add stock form */}
+            <Form>
+              {/* Include form fields for adding stock */}
+              {/* For example, product selection, quantity, etc. */}
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary">
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      );
+    };
+
   const renderProducts = (category) => {
     const selectedProducts = category === "all" ? Product_categories.all : Product_categories[category] || [];
 
@@ -79,7 +108,6 @@ const AllProducts = () => {
   };
   const ProductCards = () => {
     
-  
     return (
       <Row xs={1} md={2} lg={4} className="g-4">
         {Products.map((product) => (
@@ -111,7 +139,7 @@ const AllProducts = () => {
       <h2>Products Info</h2>
       <div className="row my-3">
         <div className="col-3 p-3 mx-2 shadow rounded"><h3>Tasks to done</h3><hr/>None</div>
-        <div className="col-3 p-3 shadow rounded"><h3>View Verifies</h3><hr/>None</div>
+        <div className="col-3 p-3 shadow rounded" onClick={handleshowVerifiesItems}><h3>Add Items</h3><hr/>None</div>
       </div>
       <hr/>
       <h4 className="my-3">See products</h4>
@@ -145,6 +173,7 @@ const AllProducts = () => {
         </Tab.Content>
         <ProductCards />
       </Container>
+      <VerifiesItems show={showVerifiesItems} handleClose={handleCloseModals} />
     </div>
   );
 };
