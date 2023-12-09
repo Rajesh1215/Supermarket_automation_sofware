@@ -1,15 +1,11 @@
 /* .employees-main-container {
-    margin: 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
   
-  .search {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  } */
+  
+.perfomance-chart{
+  height: 40vh !important;
+  width: 50%;
+}
   
   .search > input {
     padding: 5px 10px;
@@ -64,4 +60,4 @@
   .employee-list li {
     margin-bottom: 5px;
   }
-   */
+  

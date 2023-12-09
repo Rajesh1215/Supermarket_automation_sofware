@@ -8,7 +8,6 @@ import Employees from './employees/employees';
 import Customers from './customers/customers';
 import Sales from './sales/sales';
 import Sidebar from './sidebar';
-import Profile from './profile/profile';
 import Reports from "./reports/reports";
 import Orders from "./sales/orders";
 import Returns from "./sales/returns";
@@ -40,7 +39,6 @@ const Owner = () => {
             <Route path="/sales" element={<Sales />} />
             <Route path="/sales/orders" element={<Orders />} />
             <Route path="/sales/returns" element={<Returns />} />
-            <Route path="/profile" element={<Profile />} />
             <Route path="/reports" element={<Reports />} />
           </Routes>
         </Col>

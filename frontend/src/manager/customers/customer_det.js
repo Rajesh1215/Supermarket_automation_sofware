@@ -1,38 +1,38 @@
-// CustomerPage.js
-import React from 'react';
+import React from "react";
+import { Table } from "react-bootstrap";
 
 const CustomerPage = () => {
   const customer = {
     id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    address: '123 Main St, Cityville',
+    name: "John Doe",
+    email: "john@example.com",
+    address: "123 Main St, Cityville",
   };
 
   const orders = [
-    { id: 101, product: 'Product A', quantity: 2, price: 49.99 },
-    { id: 102, product: 'Product B', quantity: 1, price: 29.99 },
-    { id: 103, product: 'Product C', quantity: 3, price: 19.99 },
+    { id: 101, product: "Product A", quantity: 2, price: 49.99 },
+    { id: 102, product: "Product B", quantity: 1, price: 29.99 },
+    { id: 103, product: "Product C", quantity: 3, price: 19.99 },
   ];
 
   return (
-    <div style={{  fontFamily: 'Arial, sans-serif' }}>
+    <div>
       <h1>Customer Details</h1>
-      <div>
+      <p>
         <strong>ID:</strong> {customer.id}
-      </div>
-      <div>
+      </p>
+      <p>
         <strong>Name:</strong> {customer.name}
-      </div>
-      <div>
+      </p>
+      <p>
         <strong>Email:</strong> {customer.email}
-      </div>
-      <div>
+      </p>
+      <p>
         <strong>Address:</strong> {customer.address}
-      </div>
+      </p>
 
       <h2>Orders</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+      <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th>Order ID</th>
@@ -51,7 +51,7 @@ const CustomerPage = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 };

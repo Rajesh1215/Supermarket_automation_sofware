@@ -4,28 +4,28 @@ import "./css/sidebar.css";
 
 const Sidebar = () => {
   return (
-    <div className="sidebar">
+    <div className="sidebar col-2">
       <ul>
         <li>
-          <Link to="/owner">Dashboard</Link>
+          <Link to="/manager">Dashboard</Link>
         </li>
         <li>
-          <Link to="/owner/products">Products</Link>
+          <Link to="/manager/profile">Profile</Link>
         </li>
         <li>
-          <Link to="/owner/employees">Employees</Link>
+          <Link to="/manager/products">Products</Link>
         </li>
         <li>
-          <Link to="/owner/customers">Customers</Link>
+          <Link to="/manager/employees">Employees</Link>
         </li>
         <li>
-          <Link to="/owner/sales">Sales</Link>
+          <Link to="/manager/customers">Customers</Link>
         </li>
         <li>
-          <Link to="/owner/profile">Profile</Link>
+          <Link to="/manager/sales">Sales</Link>
         </li>
         <li>
-          <Link to="/owner/reports">Reports</Link>
+          <Link to="/manager/reports">Reports</Link>
         </li>
       </ul>
     </div>

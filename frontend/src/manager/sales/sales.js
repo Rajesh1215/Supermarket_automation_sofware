@@ -1,34 +1,103 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import "./sales.css";
+import DoughnutChart from "../charts/doughnut.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 const Sales = () => {
-  const navigate=useNavigate();
-  const gotopage=(str)=>{
+  const navigate = useNavigate();
+  const gotopage = (str) => {
     navigate(str);
-  }
+  };
   return (
     <div className="sales-main-container">
-      <div onClick={()=>{gotopage("orders")}}>orders</div>
-      <div onClick={()=>{gotopage("returns")}}>returns</div>
-      <div className="sales-status d-flex justify-content-between">
+      <div className="search-component d-flex justify-content-between ">
         <div>
-          <h2>Total Sales: $50,000</h2>
-          <p>Year-to-date: $200,000</p>
+          <h2>Orders</h2>
+        </div>
+        <div className="products-num-stats d-flex justify-content-around">
+          <div className="products-purchase mx-3">• Purchased:200</div>
+          <div className="products-sold mx-3">• Sold:100</div>
+          <div className="products-stock mx-3">• In Stock:100</div>
+        </div>
+      </div>
+
+      <div className="product-statuses row flex-wrap align-items-center">
+        <div className="col-3">
+          <div className="mb-3 out-of-stocks">
+            <div className="instock-heading mx-2">Total Orders Today</div>
+            <hr />
+            <div className="">
+              <div className="product-count mx-2">Total Orders: 500</div>
+              <div className="items-count mx-2">Returns Count: 50</div>
+            </div>
+          </div>
+
+          <div className="expired">
+            <div
+              className="instock-heading mx-2"
+              onClick={() => {
+                gotopage("returns");
+              }}
+            >
+              Returns
+            </div>
+            <hr />
+            <div className="">
+              <div className="product-count mx-2">Total returns: 1500</div>
+              <div className="items-count mx-2">Overall Returns: 100</div>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <h2>Total Orders: 1000</h2>
-          <p>Year-to-date: 4000</p>
+        <div className="col-4">
+          <div className="mb-3 out-of-stocks">
+            <div className="instock-heading mx-2">Total Revenue Today</div>
+            <hr />
+            <div className="">
+              <div className="product-count mx-2">
+                Total Revenue Generated: $2000
+              </div>
+              <div className="items-count mx-2">Total Profit Today: $800</div>
+            </div>
+          </div>
+
+          <div className="expired">
+            <div className="instock-heading mx-2">
+              Total revenue of the Year
+            </div>
+            <hr />
+            <div className="">
+              <div className="product-count mx-2">
+                Total Revenue in this year: $10,000
+              </div>
+              <div className="items-count mx-2">
+                Total Profit in this year: $4,000
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <h2>Total Revenue: $1,000,000</h2>
-          <p>Year-to-date: $4,000,000</p>
+        <div className="col-5 instock-graph d-flex justify-content-center">
+          <DoughnutChart />
+        </div>
+      </div>
+
+      <div className="mt-5 mb-1">
+        <h2>Orders</h2>
+      </div>
+      <div className=" mx-3 my-3 d-flex justify-content-between">
+        <div className="search-input d-flex w-50"><FontAwesomeIcon icon={faSearch} className="ml-2 mx-2" />
+        <input type="text" className="border-0" placeholder="Search Orders" /></div>
+        <div className=" mx-5 my-2">
+         <b>From :</b><input type="date" className="bg-white border-0 mx-3" placeholder="Start Date" />
+        <b>To :</b><input type="date" className="bg-white border-0 mx-3" placeholder="End Date" />
         </div>
       </div>
 
       <div className="all-sales">
-        <table className="table table-striped">
+        <table
+          className="table table-striped ">
           <thead>
             <tr>
               <th>Order ID</th>
@@ -70,44 +139,6 @@ const Sales = () => {
             </tr>
           </tbody>
         </table>
-      </div>
-
-      <div className="product-performance">
-        <h2>Product Performance</h2>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Total Sales</th>
-              <th>Average Order Value</th>
-              <th>Units Sold</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Laptop</td>
-              <td>$20,000</td>
-              <td>$1250</td>
-              <td>20</td>
-            </tr>
-            <tr>
-              <td>Phone</td>
-              <td>$15,000</td>
-              <td>$750</td>
-              <td>30</td>
-            </tr>
-            <tr>
-              <td>Tablet</td>
-              <td>$15,000</td>
-              <td>$300</td>
-              <td>50</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div className="charts">
-        {/* Charts section - insert charts components here */}
       </div>
     </div>
   );

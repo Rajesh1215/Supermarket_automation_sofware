@@ -4,7 +4,7 @@ import "./css/sidebar.css";
 
 const Sidebar = () => {
   return (
-    <div className="sidebar">
+    <div className="sidebar col-2">
       <ul>
         <li>
           <Link to="/supervisor/">Profile</Link>

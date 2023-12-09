@@ -1,13 +1,17 @@
 /* Global Styles */
 
 .dashboard-main-container {
-  width: 100%;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
 
+}
+.stock-analysis,.staff-perfomance{
+  height: 40vh;
+}
+.stock-staff-analysis{
+  height: 50vh;
+}
+.sales-chart{
+  height: 50vh;
+}
 .common-component-prop {
   margin-bottom: 20px;
   padding: 20px;

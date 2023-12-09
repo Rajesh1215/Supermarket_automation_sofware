@@ -1,124 +1,152 @@
-import React from "react";
-import "./products.css";
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import { Nav, Tab, Row, Col, Container,Card } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch,faFilter } from "@fortawesome/free-solid-svg-icons";
+import { useUserContext } from "../../data/data";
 
-const Products = () => {
+
+
+const AllProducts = () => {
+  const [activeTab, setActiveTab] = useState("all");
+  const navigate = useNavigate();
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const goto_prodet = () => {
+    navigate("product_details");
+  };
+  const { Products } = useUserContext();
+  const { Product_categories } = useUserContext();
+  const renderProducts = (category) => {
+    const selectedProducts = category === "all" ? Product_categories.all : Product_categories[category] || [];
+
+    return (
+      <Row>
+        {selectedProducts.map((product) => (
+          <Col key={product.id} sm={4}>
+            <div className={`product-card ${product.status}`}>{product.name}</div>
+          </Col>
+        ))}
+      </Row>
+    );
+  };
+  const FilterComponent = () => {
+    const [showFilters, setShowFilters] = useState(false);
+  
+    const toggleFilters = () => {
+      setShowFilters((prevShowFilters) => !prevShowFilters);
+    };
+  
+    const handleFilterClick = (filter) => {
+      // Handle filter selection here
+      console.log("Selected filter:", filter);
+    };
+  
+    const filterOptions = [
+      "In Stock",
+      "Nearly Out of Stock",
+      "Out of Stock",
+      "Nearly Expiring",
+      "Expired",
+      "Damaged",
+      "Returned",
+    ];
+  
+    return (
+      <div className=" my-3 mx-1 filter-container d-flex">
+        
+        <div className="filter-icon mx-1" onClick={toggleFilters}>
+          <FontAwesomeIcon icon={faFilter} />
+        </div>
+        <div className="filter-text" onClick={toggleFilters}>
+          Filter
+        </div>
+        {showFilters && (
+          <div className="filter-options d-flex">
+            {filterOptions.map((filter, index) => (
+              <div className=" mx-2" key={index} onClick={() => handleFilterClick(filter)}>
+                {filter}
+              </div>
+            ))}
+          </div>
+        )}
+        
+      </div>
+    );
+  };
+  const ProductCards = () => {
+    
+  
+    return (
+      <Row xs={1} md={2} lg={4} className="g-4">
+        {Products.map((product) => (
+          <Col key={product.id}>
+            <Card onClick={goto_prodet}>
+              <Card.Img variant="top" className=" " src={`https://via.placeholder.com/400x300`} />
+              <Card.Body>
+                <Card.Title>{product.name}</Card.Title>
+                <Card.Text>
+                  <strong>Price:</strong> ${product.price}
+                  <br />
+                  <strong>Items Present:</strong> {product.itemsPresent}
+                  <br />
+                  <strong>Expired:</strong> {product.expired}
+                  <br />
+                  <strong>Nearly Expired:</strong> {product.nearlyExpired}
+                  <br />
+                  <strong>Damaged:</strong> {product.damaged}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    );
+  };
   return (
-    <div className="main-product-component">
-      <div className="stock-product-activity">
-        <h2>Stock & Product Activity</h2>
-        <div className="stock-activity">
-          <h3>Stock Levels</h3>
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Availability</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Laptop</td>
-                <td>20</td>
-                <td>In Stock</td>
-              </tr>
-              <tr>
-                <td>Phone</td>
-                <td>15</td>
-                <td>Low Stock</td>
-              </tr>
-              <tr>
-                <td>Tablet</td>
-                <td>50</td>
-                <td>In Stock</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className="product-verification">
-          <h3>Product Verifications</h3>
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Verification Status</th>
-                <th>Date Verified</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>P1001</td>
-                <td>Laptop</td>
-                <td>Verified</td>
-                <td>2023-11-28</td>
-              </tr>
-              <tr>
-                <td>P1002</td>
-                <td>Phone</td>
-                <td>Pending</td>
-                <td>2023-11-27</td>
-              </tr>
-              <tr>
-                <td>P1003</td>
-                <td>Tablet</td>
-                <td>Verified</td>
-                <td>2023-11-26</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className="product-add">
-          <h3>Add Product</h3>
-          <div className="form-group">
-            <label for="productName">Product Name:</label>
-            <input
-              type="text"
-              id="productName"
-              className="form-control"
-              placeholder="Enter product name"
-            />
-          </div>
-
-          <div className="form-group">
-            <label for="productCategory">Category:</label>
-            <select id="productCategory" className="form-control">
-              <option value="electronics">Electronics</option>
-              <option value="clothing">Clothing</option>
-              <option value="accessories">Accessories</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label for="productQuantity">Quantity:</label>
-            <input
-              type="number"
-              id="productQuantity"
-              className="form-control"
-              placeholder="Enter quantity"
-            />
-          </div>
-
-          <div className="form-group">
-            <label for="productPrice">Price:</label>
-            <input
-              type="number"
-              id="productPrice"
-              className="form-control"
-              placeholder="Enter product price"
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary">Add Product</button>
-          </div>
+    <div className="my-3">
+      <h2>Products Info</h2>
+      <div className="row my-3">
+        <div className="col-3 p-3 mx-2 shadow rounded"><h3>Tasks to done</h3><hr/>None</div>
+        <div className="col-3 p-3 shadow rounded"><h3>View Verifies</h3><hr/>None</div>
       </div>
-      <div className="All-products">
-        All products
+      <hr/>
+      <h4 className="my-3">See products</h4>
+      <div className="search-component d-flex justify-content-between ">
+        <div className="search-input mx-3 my-1">
+          <FontAwesomeIcon icon={faSearch} className="ml-2 mx-2" />
+          <input type="text" className="border-0" placeholder="Search Products" />
+        </div>
       </div>
+      <Container>
+        <Nav variant="tabs" className="mx-5" activeKey={activeTab} onSelect={(tab) => handleTabClick(tab)}>
+          {Product_categories.map((category) => (
+            <Nav.Item key={category.product_category_id}>
+              <Nav.Link eventKey={category.name.toLowerCase()}>
+                {category.name}
+              </Nav.Link>
+            </Nav.Item>
+          ))}
+        </Nav>
+        <FilterComponent />
+        <Tab.Content>
+          
+          {Product_categories.map((category) => (
+            <div>
+            <Tab.Pane key={category.product_category_id} eventKey={category.name.toLowerCase()}>
+              {renderProducts(category.name.toLowerCase())}
+            </Tab.Pane>
+            
+            </div>
+          ))}
+        </Tab.Content>
+        <ProductCards />
+      </Container>
     </div>
   );
-}
+};
 
-export default Products;
+export default AllProducts;

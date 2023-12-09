@@ -1,20 +1,5 @@
-.reports-main-container {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.nav-tabs {
-  margin-bottom: 20px;
-}
-
-.active-heading {
-  color: #007bff;
-}
-
-.main-graphs,
-.product-graphs-container,
-.sales-graphs-container,
-.staff-graphs-container {
-  margin-top: 20px;
+.revenue-expense-chart,
+.product-revenue-expense-chart,
+.product-price-chart,.high-sales-products,.high-revenue-products{
+  height: 40vh;
 }

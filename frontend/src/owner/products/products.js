@@ -129,7 +129,7 @@ const Products = () => {
           <Button>Add New product</Button>
         </div>
         <div className="col-lg-2 col-md-2 col-sm-6">
-          <Button>View All Reports</Button>
+          <Button>See Purchases</Button>
         </div>
       </div>
 

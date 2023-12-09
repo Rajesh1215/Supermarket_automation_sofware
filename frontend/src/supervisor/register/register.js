@@ -1,113 +1,134 @@
 import React from "react";
-import "./register.css";
+import { Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router";
+import { useUserContext } from "../../data/data";
+import BarChart from "../charts/charts";
 
-const Register = () => {
+const Employees = () => {
+  const navigate = useNavigate();
+  const { Employees } = useUserContext();
+  
+  const gotoEmployeeDetails = () => {
+    navigate("employee-details");
+  };
+
+  const gotoCommunity = () => {
+    navigate("/owner/community");
+  };
+
+  // Filter employees based on their positions
+  const managers = Employees.filter(
+    (employee) => employee.status === "manager"
+  );
+  const supervisors = Employees.filter(
+    (employee) => employee.status === "supervisor"
+  );
+  const staff = Employees.filter((employee) => employee.status === "staff");
+
+  const EmployeeProfile = ({ employee }) => {
+    return (
+      <div className="employee-profile-container row " onClick={gotoEmployeeDetails}>
+        <hr/>
+        <div className="employee-profile-photo col-3">
+          {/* Display employee photo here */}
+          <img src={"https://via.placeholder.com/150"} alt={"photoof"} />
+        </div>
+        <div className="employee-profile-details col-9">
+          <h3>{employee.name}</h3>
+          <p>Mail ID : {employee.mail_id}</p>
+          <p>Position: {employee.status}</p>
+          <p>Performance Index: {employee.performance}</p>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="register-main-container">
-      <div className="date-search-components">
-        <h3>Date & Search</h3>
-        <form>
-          <div className="form-group">
-            <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" className="form-control" />
+    <div className="employees-main-container">
+      <div className="search-component d-flex justify-content-between ">
+        <div className="search-input mx-3 my-1">
+          <FontAwesomeIcon icon={faSearch} className="ml-2 mx-2" />
+          <input
+            type="text"
+            className="border-0"
+            placeholder="Search Employees"
+          />
+        </div>
+        <div className="products-num-stats d-flex justify-content-around">
+          <div className="products-purchase mx-3">
+            • Managers: {managers.length}
           </div>
-          <div className="form-group">
-            <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" className="form-control" />
+          <div className="products-sold mx-3">
+            • Supervisors: {supervisors.length}
           </div>
-          <div className="form-group">
-            <label for="searchQuery">Search Query:</label>
-            <input type="text" id="searchQuery" className="form-control" placeholder="Enter search query" />
+          <div className="products-stock mx-3">
+            • Other staff: {staff.length}
           </div>
-          <button type="submit" className="btn btn-primary">Search</button>
-        </form>
+        </div>
       </div>
 
-      <div className="all-performances">
-        <h2>All Performances</h2>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Performance ID</th>
-              <th>Employee Name</th>
-              <th>Department</th>
-              <th>Date</th>
-              <th>Performance Rating</th>
-              <th>Comments</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>P1001</td>
-              <td>John Doe</td>
-              <td>Engineering</td>
-              <td>2023-11-27</td>
-              <td>Exceeds Expectations</td>
-              <td>Consistently exceeded sales targets and successfully completed major projects.</td>
-            </tr>
-            <tr>
-              <td>P1002</td>
-              <td>Jane Smith</td>
-              <td>Marketing</td>
-              <td>2023-11-26</td>
-              <td>Meets Expectations</td>
-              <td>Met all performance expectations and contributed positively to team projects.</td>
-            </tr>
-            <tr>
-              <td>P1003</td>
-              <td>Peter Jones</td>
-              <td>Sales</td>
-              <td>2023-11-25</td>
-              <td>Needs Improvement</td>
-              <td>Showed potential but needs to improve time management and communication skills.</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="row mt-5 mx-1 mb-5  justify-content-around">
+        <div className="col-7 row shadow rounded p-3">
+          <h4>Perfomance chart</h4>
+          <hr />
+          <div className="perfomance-chart col-6">
+            <BarChart />
+          </div>
+          <div className="col-6 align-items-center">
+            <ul className="">
+              <li>• Total:</li>
+              <li>• High perfomances:</li>
+              <li>• Medium:</li>
+              <li>• Low:</li>
+            </ul>
+          </div>
+          {/* Add your performance charts here */}
+          {/* Example: <PerformanceCharts /> */}
+        </div>
+        <div className="col-4 shadow rounded p-3">
+          <h2>Activities to be done</h2>
+          <hr />
+          {/* Add your performance charts here */}
+          {/* Example: <PerformanceCharts /> */}
+          <Button>See More</Button>
+        </div>
       </div>
+      <div className="">
+        <div className="d-flex mt-5 mx-5 justify-content-between border-0 ">
+        <h2>Employees</h2>
+        <Button onClick={gotoCommunity}>View commmunity</Button>
+        </div>
+      <hr />
+      <div className="employee-list mx-3 w-100">
+        <div className="managers w-100">
+          <h2>Managers</h2>
 
-      <div className="all-staff-management">
-        <h2>All Staff Management</h2>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Employee ID</th>
-              <th>Employee Name</th>
-              <th>Department</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>E1001</td>
-              <td>John Doe</td>
-              <td>Engineering</td>
-              <td>johndoe@example.com</td>
-              <td>Software Engineer</td>
-              <td>Active</td>
-            </tr>
-            <tr>
-              <td>E1002</td>
-              <td>Jane Smith</td>
-              <td>Marketing</td>
-              <td>janesmith@example.com</td>
-              <td>Marketing Manager</td>
-              <td>Active</td>
-            </tr>
-            <tr>
-              <td>E1003</td>
-              <td>Peter Jones</td>
-              <td>Sales</td>
-              <td>peterjones@example.com</td>
-              <td>Sales Representative</td>
-              <td>Active</td>
-            </tr>
-          </tbody>
-        </table>
+            {managers.map((employee) => (
+              <EmployeeProfile employee={employee} /> 
+            ))}
+        </div>
+
+        <div className="supervisors w-100">
+          <h2>Supervisors</h2>
+          <ul>
+            {supervisors.map((employee) => (
+              <EmployeeProfile employee={employee} /> 
+            ))}
+          </ul>
+        </div>
+
+        <div className="staff w-100" onClick={gotoEmployeeDetails}>
+          <h2>Staff</h2>
+            {staff.map((employee) => (
+              <EmployeeProfile employee={employee} /> 
+            ))}
+        </div>
+      </div>
       </div>
     </div>
   );
 };
 
-export default Register;
+export default Employees;

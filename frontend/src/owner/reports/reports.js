@@ -1,102 +1,48 @@
-import React, { useState } from "react";
-import { Tabs, Tab, Table } from "react-bootstrap";  // Added Table for example
+import React from "react";
 import "./reports.css";
-
+import LineChart from "../charts/line";
+import Barchart from "../charts/barchart";
 const Reports = () => {
-  const [activeTab, setActiveTab] = useState("all");
+  return(
+  <div className="d-flex flex-column mx-3 mt-3 mb-5">
+    <h1>Report</h1>
+    <h4>Today's Report</h4>
+    
+      <div className="heading-stats row">
+        <div className="shadow rounded col-2 m-3 p-3 ">Orders <hr/>today : 100 </div>
+        <div className="shadow rounded col-2 m-3 p-3 ">Sales <hr/>today : 100</div>
+        <div className="shadow rounded col-2 m-3 p-3 ">Revenue <hr/>today : 100</div>
+        <div className="shadow rounded col-2 m-3 p-3 ">Profit/Loss <hr/>today : 100</div>
+      </div>
+      {/* Line Chart */}
+      <div className="mb-4 revenue-expense-chart">
+        <h2>Revenue And Expense Chart</h2>
+        <LineChart />
+      </div>
+      {/* Two Line Charts */}
+      <h2 className="mt-5 mb-4" >Product Perfomances</h2>
+      <div className="d-flex justify-content-between mb-5">
+        <div className="product-revenue-expense-chart px-3 w-50">
+          <h4>Revenue And Expense Chart</h4>
+          <LineChart />
+        </div>
+        <div className="product-price-chart px-3 w-50">
+          <h4>Price Perfomance</h4>
+          <LineChart />
+        </div>
+      </div>
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-
-  const renderHeading = (heading) => (
-    <h2 className={`${activeTab === heading.toLowerCase() ? "active-heading" : ""}`}>
-      {heading} reports
-    </h2>
-  );
-
-  const allTabData = [
-    { id: 1, name: "Report 1", value: 100 },
-    { id: 2, name: "Report 2", value: 150 },
-    // Add more data as needed
-  ];
-
-  const productsTabData = [
-    { id: 1, product: "Product A", sales: 200 },
-    { id: 2, product: "Product B", sales: 250 },
-    // Add more data as needed
-  ];
-
-  const salesTabData = [
-    { id: 1, month: "Jan", amount: 5000 },
-    { id: 2, month: "Feb", amount: 6000 },
-    // Add more data as needed
-  ];
-
-  const staffTabData = [
-    { id: 1, staffName: "John Doe", sales: 1000 },
-    { id: 2, staffName: "Jane Smith", sales: 1200 },
-    // Add more data as needed
-  ];
-
-  const renderTable = (data) => (
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          {Object.keys(data[0]).map((key) => (
-            <th key={key}>{key}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row) => (
-          <tr key={row.id}>
-            {Object.values(row).map((value, index) => (
-              <td key={index}>{value}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  );
-
-  return (
-    <div className="reports-main-container">
-      <Tabs
-        id="controlled-tabs"
-        activeKey={activeTab}
-        onSelect={(k) => handleTabClick(k)}
-        className="nav-tabs"
-      >
-        <Tab eventKey="all" title="All">
-          <div className="main-graphs">
-            {renderHeading("Main")}
-            {/* Content for All Tab */}
-            {activeTab === "all" && renderTable(allTabData)}
-          </div>
-        </Tab>
-        <Tab eventKey="products" title="Products">
-          <div className="product-graphs-container">
-            {renderHeading("Product")}
-            {/* Content for Products Tab */}
-            {activeTab === "products" && renderTable(productsTabData)}
-          </div>
-        </Tab>
-        <Tab eventKey="sales" title="Sales">
-          <div className="sales-graphs-container">
-            {renderHeading("Sales")}
-            {/* Content for Sales Tab */}
-            {activeTab === "sales" && renderTable(salesTabData)}
-          </div>
-        </Tab>
-        <Tab eventKey="staff" title="Staff">
-          <div className="staff-graphs-container">
-            {renderHeading("Staff")}
-            {/* Content for Staff Tab */}
-            {activeTab === "staff" && renderTable(staffTabData)}
-          </div>
-        </Tab>
-      </Tabs>
+      {/* Two Bar Charts */}
+      <div className="d-flex justify-content-between mt-5">
+        <div className="high-sales-products px-3 w-50">
+          <h4>Top 5 High Sales</h4>
+          <Barchart/>
+        </div>
+        <div className="high-revenue-products px-3 w-50">
+          <h4>Top 5 High Profits</h4>
+          <Barchart/>
+        </div>
+      </div>
     </div>
   );
 };

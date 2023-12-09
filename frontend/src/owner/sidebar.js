@@ -22,9 +22,6 @@ const Sidebar = () => {
           <Link to="/owner/sales">Sales</Link>
         </li>
         <li>
-          <Link to="/owner/profile">Profile</Link>
-        </li>
-        <li>
           <Link to="/owner/reports">Reports</Link>
         </li>
       </ul>

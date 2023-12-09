@@ -5,7 +5,7 @@ import Products from './products/products';
 import Sales from './sales/sales';
 import Sidebar from './sidebar';
 import { Container, Row, Col } from 'react-bootstrap';
-
+import Returns from './sales/returns';
 const Staff = () => {
   return (
       <Container fluid>
@@ -18,6 +18,7 @@ const Staff = () => {
               <Route path="/" element={<Profile />} />
               <Route path="/products" element={<Products />} />
               <Route path="/sales" element={<Sales />} />
+              <Route path="/sales/returns" element={<Returns />} />
             </Routes>
           </Col>
         </Row>

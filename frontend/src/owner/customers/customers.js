@@ -12,12 +12,12 @@ const Customer = () => {
         <div>
           <input
             type="text"
-            className="form-control"
+            className="form-control shadow rounded"
             placeholder="Search Customers"
           />
         </div>
         <div>
-          <select className="form-select">
+          <select className="form-select shadow rounded">
             <option value="all">All Locations</option>
             <option value="newYork">New York</option>
             <option value="california">California</option>
@@ -27,7 +27,7 @@ const Customer = () => {
       </div>
 
 
-      <div className="customer-list" onClick={gotocustomerdet}>
+      <div className="customer-list shadow rounded" onClick={gotocustomerdet}>
         <table className="table table-striped">
           <thead>
             <tr>

@@ -1,8 +1,6 @@
 /* .sales-main-container {
 
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
+  } */
   
   .sales-status {
     margin-bottom: 20px;
@@ -69,7 +67,7 @@
     padding: 20px;
   }
   
-  /* Place custom CSS for charts here 
+  /* Place custom CSS for charts here */
   
   .charts > div {
     margin: 10px;
@@ -78,4 +76,4 @@
     border: 1px solid #ddd;
     border-radius: 4px;
   }
-   */
+  
