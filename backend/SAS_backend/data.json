@@ -1,0 +1,18 @@
+[
+    {"model": "SAS_app.sale", "fields": { "order": 1, "product": 1, "quantity": 2, "product_price": 60.0, "total_amount": 120.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 2, "product": 2, "quantity": 3, "product_price": 40.0, "total_amount": 120.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 3, "product": 3, "quantity": 1, "product_price": 100.0, "total_amount": 100.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 4, "product": 4, "quantity": 4, "product_price": 25.0, "total_amount": 100.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 5, "product": 5, "quantity": 2, "product_price": 50.0, "total_amount": 100.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 20, "product": 10, "quantity": 3, "product_price": 20.0, "total_amount": 60.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 21, "product": 11, "quantity": 1, "product_price": 50.0, "total_amount": 50.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 22, "product": 12, "quantity": 4, "product_price": 10.0, "total_amount": 40.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 23, "product": 13, "quantity": 2, "product_price": 15.0, "total_amount": 30.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 24, "product": 14, "quantity": 3, "product_price": 10.0, "total_amount": 30.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 25, "product": 15, "quantity": 1, "product_price": 25.0, "total_amount": 25.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 26, "product": 16, "quantity": 4, "product_price": 5.0, "total_amount": 20.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 27, "product": 17, "quantity": 2, "product_price": 8.0, "total_amount": 16.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 28, "product": 18, "quantity": 3, "product_price": 4.0, "total_amount": 12.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 29, "product": 19, "quantity": 1, "product_price": 6.0, "total_amount": 6.0}},
+    {"model": "SAS_app.sale", "fields": { "order": 19, "product": 20, "quantity": 4, "product_price": 1.0, "total_amount": 4.0}}
+]

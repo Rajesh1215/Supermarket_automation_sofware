@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +38,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "SAS_app",
+    "django_seed",
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +52,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Assuming your React app runs on localhost:3000
 ]
 
 ROOT_URLCONF = "SAS_backend.urls"
@@ -54,7 +64,7 @@ ROOT_URLCONF = "SAS_backend.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')], # this is your template folder path.
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -105,7 +115,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = 'Asia/Kolkata'
+is_dst = False
 
 USE_I18N = True
 
@@ -121,3 +132,25 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# -------------------------------static files--------------------------------------------------------------
+# STATIC_URL = '/static/'
+
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static") # this is your static folder
+# ]
+
+# STATIC_ROOT = os.path.join(BASE_DIR,'assets') #this is you assets folder.
+
+# ---------------------------------------------------------------------------------------------------------
+
+
+
+
+# ---------------------------------------media-----------------------------------------------------------
+# MEDIA_URL ='/media/'
+
+# MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+# -----------------------------------------------------------------------------------------------------
+

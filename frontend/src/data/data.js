@@ -52,17 +52,18 @@ const test_upload_product = [
     { product_id: 20, name: "Test Product 10", product_category_id: 9, description: "Final test product for now", price: 9.99 },
 ];
 
+
 const product_items = [
-    { id: 1, product_id: 1, inventory_id: 1, damaged: 0, sold: 0 },
-    { id: 2, product_id: 2, inventory_id: 2, damaged: 0, sold: 0 },
-    { id: 3, product_id: 3, inventory_id: 3, damaged: 0, sold: 0 },
-    { id: 4, product_id: 4, inventory_id: 4, damaged: 0, sold: 0 },
-    { id: 5, product_id: 5, inventory_id: 5, damaged: 0, sold: 0 },
-    { id: 6, product_id: 6, inventory_id: 6, damaged: 0, sold: 0 },
-    { id: 7, product_id: 7, inventory_id: 7, damaged: 0, sold: 0 },
-    { id: 8, product_id: 8, inventory_id: 8, damaged: 0, sold: 0},
-    { id: 9, product_id: 9, inventory_id: 9, damaged: 0, sold: 0 },
-    { id: 10, product_id: 10, inventory_id: 10, damaged: 0, sold: 0 },
+    { id: 1, product_id: 1, inventory_id: 1, damaged: 0, sold: 0,verified:0 },
+    { id: 2, product_id: 2, inventory_id: 2, damaged: 0, sold: 0,verified:0 },
+    { id: 3, product_id: 3, inventory_id: 3, damaged: 0, sold: 0,verified:0 },
+    { id: 4, product_id: 4, inventory_id: 4, damaged: 0, sold: 0,verified:0 },
+    { id: 5, product_id: 5, inventory_id: 5, damaged: 0, sold: 0,verified:0 },
+    { id: 6, product_id: 6, inventory_id: 6, damaged: 0, sold: 0,verified:0 },
+    { id: 7, product_id: 7, inventory_id: 7, damaged: 0, sold: 0,verified:0 },
+    { id: 8, product_id: 8, inventory_id: 8, damaged: 0, sold: 0,verified:0},
+    { id: 9, product_id: 9, inventory_id: 9, damaged: 0, sold: 0,verified:0 },
+    { id: 10, product_id: 10, inventory_id: 10, damaged: 0, sold: 0,verified:0 },
 ];
 
 const inventory = [
@@ -144,29 +145,29 @@ const leaves = [
 ];
 
 const returns = [
-    { return_id: 1, compensate: "replace", product_id: 3 },
-    { return_id: 2, compensate: "refund", product_id: 6 },
-    { return_id: 3, compensate: "replace", product_id: 8 },
-    { return_id: 4, compensate: "refund", product_id: 10 },
-    { return_id: 5, compensate: "replace", product_id: 2 },
-    { return_id: 6, compensate: "refund", product_id: 5 },
-    { return_id: 7, compensate: "replace", product_id: 7 },
-    { return_id: 8, compensate: "refund", product_id: 9 },
-    { return_id: 9, compensate: "replace", product_id: 1 },
-    { return_id: 10, compensate: "refund", product_id: 4 },
+    { return_id: 1, product_id: 3 },
+    { return_id: 2, product_id: 6 },
+    { return_id: 3, product_id: 8 },
+    { return_id: 4, product_id: 10 },
+    { return_id: 5, product_id: 2 },
+    { return_id: 6, product_id: 5 },
+    { return_id: 7, product_id: 7 },
+    { return_id: 8, product_id: 9 },
+    { return_id: 9, product_id: 1 },
+    { return_id: 10, product_id: 4 },
 ];
 
 const duties = [
-    { staff_cat:"", work: "Assist customers with product inquiries", employee_id: 1, status: "active",deadline:"" },
-    { staff_cat: "Support", work: "Handle customer complaints and issues", employee_id: 2, status: "inactive",deadline:"" },
-    { staff_cat: "Sales", work: "Promote new products to customers", employee_id: 3, status: "active",deadline:"" },
-    { staff_cat: "Inventory", work: "Manage stock levels and order new inventory", employee_id: 4, status: "active",deadline:"" },
-    { staff_cat: "Support", work: "Provide technical support to customers", employee_id: 5, status: "inactive",deadline:"" },
-    { staff_cat: "Sales", work: "Conduct sales presentations", employee_id: 6, status: "active",deadline:"" },
-    { staff_cat: "Inventory", work: "Inspect and manage product quality", employee_id: 7, status: "active",deadline:"" },
-    { staff_cat: "Support", work: "Respond to customer inquiries via phone and email", employee_id: 8, status: "inactive",deadline:"" },
-    { staff_cat: "Sales", work: "Meet monthly sales targets", employee_id: 9, status: "active",deadline:"" },
-    { staff_cat: "Inventory", work: "Organize and categorize incoming inventory", employee_id: 10, status: "active",deadline:"" },
+    { staff_cat:"owner", work: "Assist customers with product inquiries", employee_id: 1, status: "timeup",deadline:"" },
+    { staff_cat: "manager", work: "Handle customer complaints and issues", employee_id: 2, status: "completed",deadline:"" },
+    { staff_cat: "manager", work: "Promote new products to customers", employee_id: 3, status: "pending",deadline:"" },
+    { staff_cat: "staff", work: "Manage stock levels and order new inventory", employee_id: 4, status: "pending",deadline:"" },
+    { staff_cat: "staff", work: "Provide technical support to customers", employee_id: 5, status: "completed",deadline:"" },
+    { staff_cat: "staff", work: "Conduct sales presentations", employee_id: 6, status: "pending",deadline:"" },
+    { staff_cat: "staff", work: "Inspect and manage product quality", employee_id: 7, status: "pending",deadline:"" },
+    { staff_cat: "staff", work: "Respond to customer inquiries via phone and email", employee_id: 8, status: "completed",deadline:"" },
+    { staff_cat: "staff", work: "Meet monthly sales targets", employee_id: 9, status: "timeup",deadline:"" },
+    { staff_cat: "staff", work: "Organize and categorize incoming inventory", employee_id: 10, status: "timeup",deadline:"" },
 ];
 
 
