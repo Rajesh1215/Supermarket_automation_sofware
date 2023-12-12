@@ -6,10 +6,10 @@ import Supervisor from "./supervisor/supervisor";
 import Staff from "./staff/staff";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserRoleSelection from "./login";
-import { useUserContext } from "./data/data";
+// import { useUserContext } from "./data/data";
 function App() {
-  const {User}= useUserContext();
-  console.log(User);
+  // const {User}= useUserContext();
+  // console.log(User);
   return (
     
       <div className="App">

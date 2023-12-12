@@ -13,6 +13,12 @@ from .views import (
     LeaveViewSet,
     ReturnViewSet,
     DutyViewSet,
+    Statistics,
+    Get_product_details,
+    Get_category_details,
+    Calculate_metrics,
+    Category_sales,
+    Monthwise_revenue
 )
 
 router = DefaultRouter()
@@ -32,4 +38,13 @@ router.register(r'duties', DutyViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     # path("My_api_view",My_api_view,name='my_api_view'),
+    path('statistics/', Statistics, name='statistics'),
+    path('get_product_details/<int:product_id>/', Get_product_details, name='get_product_details'),
+    path('get_category_details/<int:category_id>/', Get_category_details, name='get_category'),
+    path('calculate_metrics/', Calculate_metrics, name='calculate_metrics'),
+    path("category_sales/",Category_sales, name='get_category_sales'),
+    path("monthwise_revenue/",Monthwise_revenue, name='get_monthwise_revenue'),
 ]
+
+
+

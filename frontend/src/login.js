@@ -1,8 +1,10 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,  } from 'react';
 import { Form, Button, Dropdown } from 'react-bootstrap';
 import { useUserContext } from './data/data';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import ProductFilter from './data/test';
+// import axios from 'axios';
+
 const Login = () => {
   const context = useUserContext();
   const navigate = useNavigate();
@@ -11,21 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
 
-  const [employees, setEmployees] = useState([]);
-
-  useEffect(() => {
-    // Make a GET request when the component mounts
-    axios.get('http://127.0.0.1:8000/employees/')
-      .then(response => {
-        // Update the state with the fetched data
-        setEmployees(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []); 
-
-  console.log(employees);
+ 
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -43,15 +31,12 @@ const Login = () => {
     event.preventDefault();
 
     if (username.trim() !== '' && password.trim() !== '' && selectedRole !== '') {
-      // Set user data in context (modify as per your user data structure)
       context.setUser({
         username,
-        password, // Note: In a real app, you should never store passwords in plain text
+        password,
         role: selectedRole,
-        // Add other user data as needed
       });
 
-      // Navigate based on the selected role
       switch (selectedRole) {
         case 'owner':
           navigate('/owner');
@@ -118,6 +103,7 @@ const Login = () => {
           Login
         </Button>
       </Form>
+      <ProductFilter/>
     </div>
   );
 };

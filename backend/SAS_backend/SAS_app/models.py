@@ -84,7 +84,7 @@ class Order(models.Model):
     order_id = models.IntegerField(primary_key=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     customer_id = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField()
 
     def __str__(self):
         return f"Order {self.order_id} - {self.created_at}"
@@ -92,7 +92,7 @@ class Order(models.Model):
 class Sale(models.Model):
     sale_id = models.IntegerField(primary_key=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.OneToOneField(ProductItem, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     product_price = models.DecimalField(max_digits=10, decimal_places=2)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
