@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import "./products.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,55 +6,103 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Button, Accordion , Modal ,Form } from "react-bootstrap";
 import { useUserContext } from "../../data/data.js";
 import DoughnutChart from "../charts/doughnut.js";
-
+import axios from "axios";
 
 const Products = () => {
   const navigate = useNavigate();
   const Allcato = () => {
     navigate("catogaries");
   };
-  const { Product_categories } = useUserContext();
+  const [productCategories, setProductCategories] = useState([]);
+  const [statisticsData, setStatisticsData] = useState([]);
 
-  const renderCategories = () => {
-    return Product_categories.map((category) => (
-      <Accordion key={category.product_category_id}>
-        <Accordion.Item eventKey={category.product_category_id}>
-          <Accordion.Header>
-            <div className="d-flex justify-content-between w-100">
-              {category.name}{" "}
-              <div className="d-flex">
-                <Button className="mx-5" onClick={Allcato}>
-                  {" "}
-                  View Details
-                </Button>
-              </div>
-            </div>
-          </Accordion.Header>
-          <Accordion.Body className="accordian-bod">
-            <div className="h-100 w-100 row">
-              <div className="col-5 d-flex justify-content-center"><DoughnutChart  /></div>
-              <div className="col-6 ">
-                <div className="d-flex justify-content-around mb-3">
-                  <div className="totals" >Total Products : 100 </div> <div className="totals" >Total Items : 100 </div>
+  useEffect(() => {
+    const fetchProductCategories = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/productcategories/');
+        setProductCategories(response.data); // Assuming the API response is an array of product categories
+      } catch (error) {
+        console.error('Error fetching product categories:', error);
+      }
+    };
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/statistics/');
+        setStatisticsData(response.data);
+      } catch (error) {
+        console.error('Error fetching statistics:', error);
+      }
+    };
+    const fetchCategoriesAndDetails = async () => {
+      const categories = await renderCategories();
+      // Handle the categories as needed
+    };
+  
+    fetchCategoriesAndDetails();
+
+    fetchData();
+    fetchProductCategories();
+  }, []);
+
+
+  
+ 
+  const renderCategories = async () => {
+    try {
+      const categoryDetailsPromises = productCategories.map(async (category) => {
+        const response = await axios.get(`http://127.0.0.1:8000/get_category_details/${category.product_category_id}/`);
+        return (
+          <Accordion key={category.product_category_id}>
+            <Accordion.Item eventKey={category.product_category_id}>
+              <Accordion.Header>
+                <div className="d-flex justify-content-between w-100">
+                  {category.name}{" "}
+                  <div className="d-flex">
+                    <Button className="mx-5" onClick={Allcato}>
+                      {" "}
+                      View Details
+                    </Button>
+                  </div>
                 </div>
-                <div className="good-stock-products product-stats"> ■ 100 products good stock with 1000 items</div>
-                <div className="nearly-expiring-products product-stats"> ■ 20 products with 120 items near to expired</div>
-                <div className="nearly-stock-out-products product-stats"> ■ 30 products to be sold out</div>
-                <div className="expired-products product-stats"> ■ 10 products with 100 items -products</div>
-                <div className="damaged-products product-stats"> ■ 2 products with 3 items damaged</div>
-                <div className="out-of-stock-products product-stats"> ■ 30 products out of stock</div>
-                <Button className="mx-2" >See Reports </Button>
-          <Button onClick={Allcato}>See Products </Button>
-              </div>
-          </div>
-          
-            {/* You can add additional content for each category here */}
-            {/* For example, display products related to the category */}
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-    ));
+              </Accordion.Header>
+              <Accordion.Body className="accordian-bod">
+                <div className="h-100 w-100 row">
+                  <div className="col-5 d-flex justify-content-center"><DoughnutChart /></div>
+                  <div className="col-6 ">
+                    <div className="d-flex justify-content-around mb-3">
+                      <div className="totals">Total Products : 100 </div> <div className="totals">Total Items : 100 </div>
+                    </div>
+                    <div className="good-stock-products product-stats"> ■ 100 products good stock with 1000 items</div>
+                    <div className="nearly-expiring-products product-stats"> ■ 20 products with 120 items near to expired</div>
+                    <div className="nearly-stock-out-products product-stats"> ■ 30 products to be sold out</div>
+                    <div className="expired-products product-stats"> ■ 10 products with 100 items -products</div>
+                    <div className="damaged-products product-stats"> ■ 2 products with 3 items damaged</div>
+                    <div className="out-of-stock-products product-stats"> ■ 30 products out of stock</div>
+                    <Button className="mx-2">See Reports </Button>
+                    <Button onClick={Allcato}>See Products </Button>
+                  </div>
+                </div>
+                {/* You can add additional content for each category here */}
+                {/* For example, display products related to the category */}
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+        );
+      });
+  
+      const categoryDetails = await Promise.all(categoryDetailsPromises);
+      return categoryDetails;
+    } catch (error) {
+      console.error('Error fetching category details:', error);
+      // Handle error or return fallback UI
+      return null;
+    }
   };
+
+
+  
+
+  
   const [showAddStockModal, setShowAddStockModal] = useState(false);
   const [showAddProductModal, setShowAddProductModal] = useState(false);
   const [showSeePurchasesModal, setShowSeePurchasesModal] = useState(false);
@@ -139,19 +187,15 @@ const Products = () => {
   return (
     <div className="main-product-components">
       <div className="search-component d-flex justify-content-between ">
-        <div className="search-input mx-3 my-1">
-          <FontAwesomeIcon icon={faSearch} className="ml-2 mx-2" />
-          <input
-            type="text"
-            className="border-0"
-            placeholder="Search Products"
-          />
+        <div className="sear mx-3 my-1">
+          <h3>Products Details</h3>
         </div>
         <div className="products-num-stats d-flex justify-content-around">
-          <div className="products-purchase mx-3">• Purchased:200</div>
-          <div className="products-sold mx-3">• Sold:100</div>
-          <div className="products-stock mx-3">• In Stock:100</div>
-        </div>
+            <div className="products-purchase mx-3">• Purchased: {statisticsData.total_items}</div>
+            <div className="products-sold mx-3">• Sold: {statisticsData.sold_items}</div>
+            <div className="products-stock mx-3">• In Stock: {statisticsData.verified_items}</div>
+          </div>
+
       </div>
       
       <div className="product-statuses row flex-wrap align-items-center">
@@ -159,22 +203,23 @@ const Products = () => {
           <div className="instock-heading mx-4">In Stock</div>
           <hr />
           <div className="instock-details d-flex justify-content-around m-3">
-            <div className="total-product-count mx-2">■ Total-Products-100</div>
-            <div className="total-items-count mx-2">■ Total-Items-100</div>
+            <div className="total-product-count mx-2">■ Total-Products-{statisticsData.total_products}</div>
+            <div className="total-items-count mx-2">■ Total-Items-{statisticsData.total_items}</div>
           </div>
           <div className="nearly-completed ">
             <h6 className="mx-1 my-2">Nearly Completing </h6>
             <div className="d-flex mx-3">
-              <div className="product-count mx-2">Products-100</div>
+              <div className="product-count mx-2">Products-{statisticsData.nearly_sold_out_products}</div>
               <div className="items-count mx-2">Items-100</div>
             </div>
           </div>
           <div className="nearly-expiring ">
             <h6 className="mx-1 my-2">Nearly Expiring </h6>
             <div className="d-flex mx-3">
-              <div className="product-count mx-2">Products-100</div>
+              <div className="product-count mx-2">Products-{ statisticsData.nearly_expiring_products}</div>
               <div className="items-count mx-2">Items-100</div>
             </div>
+            <div className="m-2 text-danger"> Unverified items-{statisticsData.unverified_items} </div>
           </div>
         </div>
         <div className="col-3">
@@ -182,8 +227,7 @@ const Products = () => {
             <div className="instock-heading mx-2">Out of Stock</div>
             <hr />
             <div className="">
-              <div className="product-count mx-2">Products-100</div>
-              <div className="items-count mx-2">Items-100</div>
+              <div className="product-count mx-2">Products-{statisticsData.out_of_stock}</div>
             </div>
           </div>
 
@@ -191,8 +235,8 @@ const Products = () => {
             <div className="instock-heading mx-2">Expires, Damages</div>
             <hr />
             <div className="">
-              <div className="product-count mx-2">Products-100</div>
-              <div className="items-count mx-2">Items-100</div>
+              <div className="product-count mx-2">Products-{statisticsData.expired_products}</div>
+              <div className="items-count mx-2">Items-{statisticsData.expired_items}</div>
             </div>
           </div>
         </div>
@@ -222,15 +266,6 @@ const Products = () => {
         <div className="accordion">{renderCategories()}</div>
       </div>
 
-      <div className="High-trades ">
-        {/* Top-selling products section */}
-        high trades
-      </div>
-
-      <div className="recents">
-        recents
-        {/* Recently added or updated products section */}
-      </div>
             {/* Modals */}
       <AddStockModal show={showAddStockModal} handleClose={handleCloseModals} />
       <AddProductModal show={showAddProductModal} handleClose={handleCloseModals} />

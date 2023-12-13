@@ -11,8 +11,10 @@ from django.db.models import Q
 from decimal import Decimal  # Import the Decimal class
 from django.db.models.functions import TruncMonth
 from datetime import datetime
-
-
+from rest_framework.views import APIView
+from django.contrib.auth import authenticate
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
@@ -63,15 +65,6 @@ class DutyViewSet(viewsets.ModelViewSet):
     queryset = Duty.objects.all()
     serializer_class = DutySerializer
 
-# from rest_framework.decorators import api_view
-# from rest_framework.response import Response
-
-# @api_view(['GET'])
-# def My_api_view(request):
-#     data = {'message': 'Hello, this is your API!'}
-#     return Response(data)
-
-
 
 @api_view(['GET'])
 def Statistics(request):
@@ -95,12 +88,21 @@ def Statistics(request):
 
     # Number of expired items
     expired_items = ProductItem.objects.filter(inventory__expiry__lt=timezone.now()).count()
-
+    expired_products = ProductItem.objects.filter(inventory__expiry__lt=timezone.now()).values("product__name").annotate(
+        item_count=Count('product__name')
+    ).count()
     # Number of sold items
     sold_items = ProductItem.objects.filter(sold=True).count()
 
+    out_of_stock = Product.objects.annotate(
+        num_unverified_items=Count(
+            'productitem',
+            filter=~Q(productitem__verified=True)  # Exclude ProductItems with verified=True
+        )
+    ).filter(num_unverified_items=0).count()
     # Number of verified items
-    verified_items = ProductItem.objects.filter(verified=True).count()
+    verified_items = ProductItem.objects.filter(verified=True,sold=False).count()
+    unverified_items = ProductItem.objects.filter(verified=False,sold=False).count()
 
     # Grouped count of items by product
     items_by_product = ProductItem.objects.values('product__name').annotate(item_count=Count('id'))
@@ -112,16 +114,18 @@ def Statistics(request):
         'total_categories': total_categories,
         'total_products': total_products,
         'total_items': total_items,
+        "out_of_stock":out_of_stock,
+        "expired_products":expired_products,
         'nearly_sold_out_products': nearly_sold_out_products,
         'nearly_expiring_products': nearly_expiring_products,
         'good_expiry_products': good_expiry_products,
         'expired_items': expired_items,
         'sold_items': sold_items,
         'verified_items': verified_items,
+        "unverified_items":unverified_items,
         'items_by_product': items_by_product,
         'items_by_category': items_by_category,
     })
-
 
 @api_view(['GET'])
 def Get_product_details(request, product_id):
@@ -180,8 +184,6 @@ def Get_product_details(request, product_id):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# ...
-
 def serialize_product_items(items):
     serialized_items = []
     for item in items:
@@ -196,9 +198,8 @@ def serialize_product_items(items):
         serialized_items.append(serialized_item)
     return serialized_items
 
-
 @api_view(['GET'])
-def Get_category_details(request, category_id):
+def Get_category_details(request, category_id=1):
     try:
         # Count of products with expired items
         products_with_expired_items = ProductItem.objects.filter(product__product_category=category_id,inventory__expiry__lt=timezone.now(),verified=True,sold=False).values('product__name').annotate(
@@ -327,7 +328,6 @@ def Calculate_metrics(request):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 @api_view(['GET'])
 def Category_sales(request):
     try:
@@ -351,8 +351,6 @@ def Category_sales(request):
 
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-
 
 @api_view(['GET'])
 def Monthwise_revenue(request):
@@ -375,3 +373,25 @@ def Monthwise_revenue(request):
 
     except Exception as e:
         return Response({'error': str(e)}, status=500)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class LoginView(APIView):
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        try:
+            # Retrieve the user based on the provided username
+            user = Employee.objects.get(username=username)
+
+            # Check if the provided password matches the stored password
+            if password == user.password:
+                # Password is correct, return user's status (role)
+                return Response({'status': user.status}, status=status.HTTP_200_OK)
+            else:
+                # Password is incorrect
+                return Response({'error': 'Invalid username or password'})
+        
+        except Employee.DoesNotExist:
+            # User with the provided username does not exist
+            return Response({'error': 'Invalid username or password'})

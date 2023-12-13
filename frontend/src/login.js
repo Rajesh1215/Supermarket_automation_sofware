@@ -1,9 +1,9 @@
 import React, { useState,  } from 'react';
-import { Form, Button, Dropdown } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { useUserContext } from './data/data';
 import { useNavigate } from 'react-router-dom';
 import ProductFilter from './data/test';
-// import axios from 'axios';
+import axios from 'axios';
 
 const Login = () => {
   const context = useUserContext();
@@ -11,8 +11,7 @@ const Login = () => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [selectedRole, setSelectedRole] = useState('');
-
+  const [error, setError] = useState('');
  
 
   const handleUsernameChange = (event) => {
@@ -23,39 +22,50 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleRoleSelect = (role) => {
-    setSelectedRole(role);
-  };
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-
-    if (username.trim() !== '' && password.trim() !== '' && selectedRole !== '') {
-      context.setUser({
-        username,
-        password,
-        role: selectedRole,
-      });
-
-      switch (selectedRole) {
-        case 'owner':
-          navigate('/owner');
-          break;
-        case 'manager':
-          navigate('/manager');
-          break;
-        case 'supervisor':
-          navigate('/supervisor');
-          break;
-        case 'staff':
-          navigate('/staff');
-          break;
-        default:
-          alert('Please select a valid user role.');
+  
+    try {
+      console.log(username, password);
+      const response = await axios.post('http://127.0.0.1:8000/login/', { username, password });
+      const userStatus = response.data.status;
+      console.log(response);
+      if (userStatus) {
+        context.setUser({
+          username,
+          password,
+          role: userStatus,
+        });
+  
+        switch (userStatus) {
+          case 'owner':
+            navigate('/owner');
+            break;
+          case 'manager':
+            navigate('/manager');
+            break;
+          case 'supervisor':
+            navigate('/supervisor');
+            break;
+          case 'staff':
+            navigate('/staff');
+            break;
+          default:
+            alert('Please select a valid user role.');
+        }
+      } else {
+        setError(response.data.error);
       }
-    } else {
-      alert('Please enter a valid username, password, and select a role.');
+    }  catch (error) {
+      console.error('Login failed', error);
+      if (error.response.status === 401) {
+        alert(error.response.data.error || 'Invalid credentials');
+      } else {
+        alert('Login failed. Please try again.');
+      }
     }
+    
   };
 
   return (
@@ -83,22 +93,7 @@ const Login = () => {
             required
           />
         </Form.Group>
-
-        <Form.Group controlId="role">
-          <Form.Label>User Role</Form.Label>
-          <Dropdown className='my-3' onSelect={(eventKey) => handleRoleSelect(eventKey)}>
-            <Dropdown.Toggle variant="primary" id="dropdown-basic">
-              {selectedRole ? selectedRole : 'Select Role'}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey="owner">Owner</Dropdown.Item>
-              <Dropdown.Item eventKey="manager">Manager</Dropdown.Item>
-              <Dropdown.Item eventKey="supervisor">Supervisor</Dropdown.Item>
-              <Dropdown.Item eventKey="staff">Staff</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Form.Group>
-
+        {error}
         <Button variant="primary" type="submit">
           Login
         </Button>
