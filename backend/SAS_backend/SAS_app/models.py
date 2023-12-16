@@ -12,7 +12,7 @@ class ProductCategory(models.Model):
         return self.name
 
 class Employee(models.Model):
-    user_id = models.IntegerField(primary_key=True)
+    user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50, unique=True, null=False)
     name = models.CharField(max_length=100, null=False)
     dob = models.DateField(default=datetime.date.today)
@@ -135,10 +135,10 @@ class Duty(models.Model):
         ('time up', 'Time Up'),
     ]
 
-    staff_cat = models.CharField(max_length=50)
+    staff_cat = models.CharField(max_length=50,default="staff")
     work = models.TextField()
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES,default='pending')
     deadline = models.DateField()
 
     def __str__(self):

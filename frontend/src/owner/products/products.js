@@ -198,13 +198,13 @@ const Products = () => {
     );
   };
 
+
   const ProductForm = () => {
     const [categories, setCategories] = useState([]);
     const [showProductModal, setShowProductModal] = useState(false);
     const [showCategoryModal, setShowCategoryModal] = useState(false);
   
     useEffect(() => {
-      // Fetch existing categories
       axios.get('http://127.0.0.1:8000/productcategories/')
         .then(response => {
           setCategories(response.data);
@@ -228,13 +228,12 @@ const Products = () => {
       price: Yup.number().required('Required').positive('Price must be positive'),
       product_category: Yup.string().required('Required'),
       newCategory: Yup.string().when('product_category', {
-        is: (val) => val === 'newCategory',
+        is: 'newCategory',
         then: Yup.string().required('Required'),
       }),
     });
   
     const onSubmit = (values) => {
-      // Handle form submission
       const productData = {
         name: values.name,
         description: values.description,
@@ -242,27 +241,37 @@ const Products = () => {
         product_category: values.product_category === 'newCategory' ? values.newCategory : values.product_category,
       };
   
-      // Post the product data to create a new product
       axios.post('http://127.0.0.1:8000/products/', productData)
         .then(response => {
           console.log('Product created successfully:', response.data);
-          // You may want to redirect or handle success in some way
-          setShowProductModal(false); // Close the product modal after submission
+          setShowProductModal(false);
+          handleCloseModals();
         })
         .catch(error => {
           console.error('Error creating product:', error);
         });
     };
   
-    const handleShowProductModal = () => setShowProductModal(true);
     const handleCloseProductModal = () => setShowProductModal(false);
   
     const handleShowCategoryModal = () => setShowCategoryModal(true);
     const handleCloseCategoryModal = () => setShowCategoryModal(false);
   
+    const handleAddCategory = (values, actions) => {
+      axios.post('http://127.0.0.1:8000/productcategories/', { name: values.newCategory })
+        .then(response => {
+          console.log('Category created successfully:', response.data);
+          setCategories(prevCategories => [...prevCategories, response.data]);
+          actions.setFieldValue('newCategory', '');
+          handleCloseCategoryModal();
+        })
+        .catch(error => {
+          console.error('Error creating category:', error);
+        });
+    };
+  
     return (
       <div>
-  
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -270,40 +279,43 @@ const Products = () => {
         >
           <Form>
             <label>Name:</label>
-            <Field type="text" name="name" />
+            <Field type="text" name="name" className="m-2" />
             <ErrorMessage name="name" component="div" />
-  
+            <br/>
             <label>Description:</label>
             <Field type="text" name="description" />
             <ErrorMessage name="description" component="div" />
-  
+            <br/>
             <label>Price:</label>
-            <Field type="text" name="price" />
+            <Field type="text" name="price" className="m-2" />
             <ErrorMessage name="price" component="div" />
-  
+            <br/>
             <label>Product Category:</label>
-            <Field as="select" name="product_category">
+            <Field as="select" name="product_category" className="m-2" >
               <option value="" disabled>Select a category</option>
               {categories.map(category => (
                 <option key={category.product_category_id} value={category.product_category_id}>{category.name}</option>
               ))}
-              <option value="newCategory">Add New Category</option>
             </Field>
             <ErrorMessage name="product_category" component="div" />
-  
+            <br/>
             {initialValues.product_category === 'newCategory' && (
               <>
                 <label>New Category Name:</label>
-                <Field type="text" name="newCategory" />
+                <Field type="text" name="newCategory" className="m-2" />
                 <ErrorMessage name="newCategory" component="div" />
               </>
             )}
+            <br/>
+
+            <Button type="button" className="mx-3" onClick={handleShowCategoryModal}>
+              Add New Category
+            </Button>
   
             <Button type="submit">Create Product</Button>
           </Form>
         </Formik>
   
-        {/* AddProductModal */}
         <Modal show={showProductModal} onHide={handleCloseProductModal}>
           <Modal.Header closeButton>
             <Modal.Title>Add New Product</Modal.Title>
@@ -344,6 +356,10 @@ const Products = () => {
                     <ErrorMessage name="newCategory" component="div" />
                   </>
                 )}
+  
+                <Button variant="primary" type="submit">
+                  Save Changes
+                </Button>
               </Form>
             </Formik>
           </Modal.Body>
@@ -351,37 +367,42 @@ const Products = () => {
             <Button variant="secondary" onClick={handleCloseProductModal}>
               Close
             </Button>
-            <Button variant="primary" type="submit">
-              Save Changes
-            </Button>
           </Modal.Footer>
         </Modal>
   
-        {/* AddCategoryModal */}
         <Modal show={showCategoryModal} onHide={handleCloseCategoryModal}>
           <Modal.Header closeButton>
             <Modal.Title>Add New Category</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* Include form fields for adding a new category */}
-            <Form>
-              <label>New Category Name:</label>
-              <Field type="text" name="newCategory" />
-              <ErrorMessage name="newCategory" component="div" />
-            </Form>
+            <Formik
+              initialValues={{ newCategory: '' }}
+              validationSchema={Yup.object({
+                newCategory: Yup.string().required('Required'),
+              })}
+              onSubmit={(values, actions) => handleAddCategory(values, actions)}
+            >
+              <Form>
+                <label>New Category Name:</label>
+                <Field type="text" name="newCategory" />
+                <ErrorMessage name="newCategory" component="div" />
+                <Button variant="primary" type="submit">
+                  Save Changes
+                </Button>
+              </Form>
+            </Formik>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseCategoryModal}>
               Close
-            </Button>
-            <Button variant="primary" /* Add onClick handler for saving the new category */>
-              Save Changes
             </Button>
           </Modal.Footer>
         </Modal>
       </div>
     );
   };
+  
+  
   
   
   
