@@ -30,9 +30,9 @@ const Owner = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/catogaries" element={<Allproducts />} />
-            <Route path="/products/catogaries/product_details" element={<ProductDetailsExample />} />
+            <Route path="/products/catogaries/product_details/:product_id" element={<ProductDetailsExample />} />
             <Route path="/employees" element={<Employees />} /> {/* Add the forward slash here */}
-            <Route path="/employees/employee-details" element={<EmployeeDetails />} />
+            <Route path="/employees/employee-details/:employee_id" element={<EmployeeDetails />} />
             <Route path="/community" element={<Community />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/customers/customer-details" element={<CustomerPage />} />

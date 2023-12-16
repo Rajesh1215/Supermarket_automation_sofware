@@ -2,7 +2,6 @@ import React, { useState,  } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useUserContext } from './data/data';
 import { useNavigate } from 'react-router-dom';
-import ProductFilter from './data/test';
 import axios from 'axios';
 
 const Login = () => {
@@ -98,7 +97,6 @@ const Login = () => {
           Login
         </Button>
       </Form>
-      <ProductFilter/>
     </div>
   );
 };

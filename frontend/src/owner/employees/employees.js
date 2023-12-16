@@ -1,21 +1,39 @@
-import React,{useState} from "react";
-import { Button,Modal,Form } from "react-bootstrap";
+import React,{useState,useEffect} from "react";
+import { Button,Modal,Form,Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
-import { useUserContext } from "../../data/data";
 import "./employees.css";
-import BarChart from "../charts/barchart";
+import {Histogram} from "../charts/barchart";
+import axios from "axios";
 
 const Employees = () => {
   const navigate = useNavigate();
-  const { Employees } = useUserContext();
   
-  const gotoEmployeeDetails = () => {
-    navigate("employee-details");
+  const gotoEmployeeDetails = (id) => {
+    navigate(`employee-details/${id}`);
   };
 
+  const [Employees, setEmployees] = useState([]);
 
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/employees/');
+        setEmployees(response.data);
+        // axios.get('http://127.0.0.1:8000/duties/')
+        // .then(response => setDutyData(response.data))  // Display only the first five duties
+        // .catch(error => console.error('Error fetching duty data:', error));
+
+      } catch (error) {
+        console.error('Error fetching employees data:', error);
+      }
+      
+    };
+
+    fetchEmployees();
+  }, []);
 
   // Filter employees based on their positions
   const managers = Employees.filter(
@@ -28,7 +46,7 @@ const Employees = () => {
 
   const EmployeeProfile = ({ employee }) => {
     return (
-      <div className="employee-profile-container row " onClick={gotoEmployeeDetails}>
+      <div className="employee-profile-container row " onClick={()=>{gotoEmployeeDetails(employee.user_id)}}>
         <hr/>
         <div className="employee-profile-photo col-3">
           {/* Display employee photo here */}
@@ -43,38 +61,15 @@ const Employees = () => {
       </div>
     );
   };
-  const [showSeemore, setShowSeemore] = useState(false);
   const [showAddEmployee, setShowAddEmployee] = useState(false);
-  const [showAssignTasks, setShowAssignTasks] = useState(false);
 
-  const handleshowSeemore = () => setShowSeemore(true);
   const handleshowAddEmployee = () => setShowAddEmployee(true);
-  const handleshowAssignTasks = () => setShowAssignTasks(true);
+
 
   const handleCloseModals = () => {
-    setShowSeemore(false);
     setShowAddEmployee(false);
-    setShowAssignTasks(false);
   };
 
-  const AssignTasks = ({ show, handleClose }) => {
-    return (
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>See Purchases</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Display information related to purchases */}
-          {/* For example, a table of purchase history */}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  };
   const AddEmployee = ({ show, handleClose }) => {
     return (
       <Modal show={show} onHide={handleClose}>
@@ -99,30 +94,7 @@ const Employees = () => {
       </Modal>
     );
   };
-  const Seemore = ({ show, handleClose }) => {
-    return (
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Stock</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Add stock form */}
-          <Form>
-            {/* Include form fields for adding stock */}
-            {/* For example, product selection, quantity, etc. */}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary">
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  };
+
 
   return (
     <div className="employees-main-container">
@@ -149,33 +121,9 @@ const Employees = () => {
       </div>
 
       <div className="row mt-5 mx-1 mb-5  justify-content-around">
-        <div className="col-7 row shadow rounded p-3">
-          <h4>Perfomance chart</h4>
-          <hr />
-          <div className="perfomance-chart col-6">
-            <BarChart />
-          </div>
-          <div className="col-6 align-items-center">
-            <ul className="">
-              <li>• Total:</li>
-              <li>• High perfomances:</li>
-              <li>• Medium:</li>
-              <li>• Low:</li>
-            </ul>
-          </div>
-          {/* Add your performance charts here */}
-          {/* Example: <PerformanceCharts /> */}
-        </div>
-        <div className="col-4 shadow rounded p-3">
-          <h2>Activities to be done</h2>
-          <hr />
-          {/* Add your performance charts here */}
-          {/* Example: <PerformanceCharts /> */}
-          <div className="d-flex m-2">
-          <Button className="mx-3" onClick={handleshowSeemore}>See More</Button>
-          <Button onClick={handleshowAssignTasks}>Assign a task</Button>
-          </div>
-        </div>
+      <div className="col-6 shadow rounded">
+        <PerformanceCOmponent/></div>
+        <div className="col-5 shadow rounded"> <ActivitiesComponent/></div>
       </div>
       <div className="">
         <div className="d-flex mt-5 mx-5 justify-content-between border-0 ">
@@ -201,7 +149,7 @@ const Employees = () => {
           </ul>
         </div>
 
-        <div className="staff w-100" onClick={gotoEmployeeDetails}>
+        <div className="staff w-100" >
           <h2>Staff</h2>
             {staff.map((employee) => (
               <EmployeeProfile employee={employee} /> 
@@ -209,11 +157,183 @@ const Employees = () => {
         </div>
       </div>
       </div>
-      <AssignTasks show={showAssignTasks} handleClose={handleCloseModals} />
       <AddEmployee show={showAddEmployee} handleClose={handleCloseModals} />
-      <Seemore show={showSeemore} handleClose={handleCloseModals} />
     </div>
   );
 };
+
+
+export function ActivitiesComponent(){
+  const [showSeemore, setShowSeemore] = useState(false);
+  const [dutyData, setDutyData] = useState([]);
+  const handleshowAssignTasks = () => setShowAssignTasks(true);
+  const [showAssignTasks, setShowAssignTasks] = useState(false);
+
+
+  const handleshowSeemore = () => setShowSeemore(true);
+
+  const handleCloseModals = () => {
+    setShowSeemore(false);
+    setShowAssignTasks(false);
+
+  };
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        axios.get('http://127.0.0.1:8000/duties/')
+        .then(response => setDutyData(response.data))  // Display only the first five duties
+        .catch(error => console.error('Error fetching duty data:', error));
+
+      } catch (error) {
+        console.error('Error fetching employees data:', error);
+      }
+      
+    };
+
+    fetchEmployees();
+  }, []);
+
+  const Seemore = ({ show, handleClose }) => {
+    return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Duties</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Staff Category</th>
+                <th>Work</th>
+                <th>Status</th>
+                <th>Deadline</th>
+                <th>Employee</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dutyData.map(duty => (
+                <tr key={duty.id}>
+                  <td>{duty.id}</td>
+                  <td>{duty.staff_cat}</td>
+                  <td>{duty.work}</td>
+                  <td>{duty.status}</td>
+                  <td>{duty.deadline}</td>
+                  <td>{duty.employee}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary">
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  const AssignTasks = ({ show, handleClose }) => {
+    return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>See Purchases</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Display information related to purchases */}
+          {/* For example, a table of purchase history */}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  return(
+    <div className="">
+          <h4>Activities to be done</h4>
+          <hr />
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+              <th>Employee</th>
+                <th>Work</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dutyData.slice(0,4).map(duty => (
+                <tr key={duty.id}>
+                   <td>{duty.employee}</td>
+                  <td>{duty.work}</td>
+                 
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          {/* Add your performance charts here */}
+          {/* Example: <PerformanceCharts /> */}
+          <div className="d-flex m-2">
+          <Button className="mx-3" onClick={handleshowSeemore}>See More</Button>
+          <Button onClick={handleshowAssignTasks}>Assign a task</Button>
+          </div>
+          <Seemore show={showSeemore} handleClose={handleCloseModals} />
+          <AssignTasks show={showAssignTasks} handleClose={handleCloseModals} />
+
+
+        </div>
+  )
+}
+
+
+export function PerformanceCOmponent() {
+  const [performanceData, setPerformanceData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/employees/");
+        const data = response.data;
+        const performances = data.map(employee => employee.performance);
+        setPerformanceData(performances);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array means this effect runs once when the component mounts
+
+  // Calculate the number of members in each performance category
+  const highPerformanceCount = performanceData.filter(score => score >= 66).length;
+  const mediumPerformanceCount = performanceData.filter(score => score >= 33 && score < 66).length;
+  const lowPerformanceCount = performanceData.filter(score => score < 33).length;
+
+  return (
+    <div className="row p-1 h-100">
+      <h4>Performance Chart</h4>
+      <hr />
+      <div className="performance-chart col-12">
+        {/* Pass the performance data to the Histogram component */}
+        <Histogram data={performanceData} binCount={3} />
+      </div>
+      <div className="col-12  ">
+        <ul className="d-flex justify-content-around px-2">
+          <li>High performances: {highPerformanceCount}</li>
+          <li>Medium: {mediumPerformanceCount}</li>
+          <li>Low: {lowPerformanceCount}</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+
+
+
 
 export default Employees;

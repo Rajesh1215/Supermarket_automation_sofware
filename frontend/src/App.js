@@ -7,6 +7,9 @@ import Staff from "./staff/staff";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserRoleSelection from "./login";
 import { useUserContext } from "./data/data";
+import ProductFilter from './data/test';
+
+
 function App() {
   const {User}= useUserContext();
   console.log(User);
@@ -21,7 +24,7 @@ function App() {
             <Route path="/manager/*" element={<Manager />} />
             <Route path="/supervisor/*" element={<Supervisor />} />
             <Route path="/staff/*" element={<Staff />} />
-
+            <Route path="/test" element={<ProductFilter />} />
           </Routes>
         </Router>
       </div>

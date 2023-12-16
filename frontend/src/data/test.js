@@ -1,77 +1,65 @@
-// import React, { useEffect } from 'react';
-// import { useUserContext } from './data';   // Import your context hook
+// import React, { useState, useEffect } from 'react';
+// import { Button, Modal, Table } from 'react-bootstrap';
+// import axios from 'axios';
 
-const ProductFilter = () => {
-//   const { Product_items, Inventory } = useUserContext();
+const ReturnsComponent = () => {
+  // const [showModal, setShowModal] = useState(false);
+  // const [returnsData, setReturnsData] = useState([]);
 
-//   const filterProductItems = () => {
-//     // Check if Product_items and Inventory are available
-//     if (!Product_items || !Inventory) {
-//       return {
-//         unsoldCheckedCount: 0,
-//         nearExpiryCount: 0,
-//         nearlySoldOutCount: 0,
-//       };
-//     }
-  
-//     // Filter product items that are not sold and not checked
-//     const unsoldCheckedItems = Product_items.filter(item => !item.sold && item.verified);
-  
-//     // Find count of unsold and Checked items
-//     const unsoldCheckedCount = unsoldCheckedItems.length;
-  
-//     // Find products near expiry
-//     const nearExpiryProducts = Inventory.filter(item => {
-//       const today = new Date();
-//       const expiryDate = new Date(item.expiry);
-//       const daysUntilExpiry = Math.floor((expiryDate - today) / (1000 * 60 * 60 * 24));
-//       return daysUntilExpiry <= 7;  // Assuming "near expiry" means within a week
-//     });
-  
-//     // Find count of products near expiry
-//     const nearExpiryCount = nearExpiryProducts.length;
-  
-//     // Find products having less than 2 items (nearly sold out)
-    
-//   // Find product ids with less than 2 items (nearly sold out)
-//   const productsWithFewItems = {};
-//   Product_items.forEach(item => {
-//     const productId = item.product;
-//     productsWithFewItems[productId] = (productsWithFewItems[productId] || 0) + 1;
-//   });
+  // const handleShowModal = () => {
+  //   setShowModal(true);
+  //   fetchDataReturns();
+  // };
 
-//   // Find product ids with less than 2 items
-//   const nearlySoldOutProductIds = Object.keys(productsWithFewItems).filter(
-//     productId => productsWithFewItems[productId] < 100)
-  
-//     // Find count of nearly sold out products
-//     const nearlySoldOutCount = nearlySoldOutProductIds.length;
-  
-//     return {
-//       unsoldCheckedCount,
-//       nearExpiryCount,
-//       nearlySoldOutCount,
-//     };
-//   };
-  
+  // const handleHideModal = () => {
+  //   setShowModal(false);
+  // };
 
-//   const {
-//     unsoldCheckedCount,
-//     nearExpiryCount,
-//     nearlySoldOutCount,
-//   } = () => filterProductItems();
-
-//   useEffect(() => {
-//     console.log('Unsold and checked Items Count:', unsoldCheckedCount);
-//     console.log('Products Near Expiry Count:', nearExpiryCount);
-//     console.log('Nearly Sold Out Products Count:', nearlySoldOutCount);
-//   }, [unsoldCheckedCount, nearExpiryCount, nearlySoldOutCount]);
+  // const fetchDataReturns = async () => {
+  //   try {
+  //     const response = await axios.get('http://127.0.0.1:8000/returns/');
+  //     setReturnsData(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching returns data:', error);
+  //   }
+  // };
 
   return (
     <div>
-      {/* Render your component or UI here */}
+      {/* <Button variant="primary" onClick={handleShowModal}>
+        Open Returns Modal
+      </Button>
+
+      <Modal show={showModal} onHide={handleHideModal} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Returns Data</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Return ID</th>
+                <th>Product Item ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              {returnsData.map((item) => (
+                <tr key={item.return_id}>
+                  <td>{item.return_id}</td>
+                  <td>{item.product_item_id}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleHideModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal> */}
     </div>
   );
 };
 
-export default ProductFilter;
+export default ReturnsComponent;

@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import "./products.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,6 +6,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Button, Accordion , Modal ,Form } from "react-bootstrap";
 import { useUserContext } from "../../data/data.js";
 import DoughnutChart from "../charts/doughnut.js";
+import axios from 'axios';
 
 
 const Products = () => {
@@ -111,30 +112,130 @@ const Products = () => {
       </Modal>
     );
   };
-  const AddStockModal = ({ show, handleClose }) => {
+
+
+  const InventoryForm = ({ onClose }) => {
+    const [formData, setFormData] = useState({
+      stock_status: 'in stock',
+      purchased_stock: '',
+      expiry: '',
+      stock_expense: '',
+      other_expense: '',
+      stock: '',
+      date_of_purchase: '',
+      product: '',
+    });
+  
+    const [productList, setProductList] = useState([]);
+    const [statusOptions] = useState(['sold', 'in stock', 'need to add']);
+  
+    useEffect(() => {
+      // Fetch product names from the API
+      axios.get('http://127.0.0.1:8000/products/')
+        .then(response => {
+          setProductList(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching product names:', error);
+        });
+    }, []); // Empty dependency array ensures the effect runs only once, similar to componentDidMount
+  
+    const handleChange = (e) => {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+  
+    const handleSubmit = (e) => {
+      e.preventDefault();
+  
+      // Make a POST request to create an inventory record
+      axios.post('http://127.0.0.1:8000/inventories/', formData)
+        .then(response => {
+          console.log('Inventory record created successfully:', response.data);
+          // Reset form after successful submission
+          setFormData({
+            stock_status: 'in stock',
+            purchased_stock: '',
+            expiry: '',
+            stock_expense: '',
+            other_expense: '',
+            stock: '',
+            date_of_purchase: '',
+            product: '',
+          });
+          // Close the modal
+          onClose();
+        })
+        .catch(error => {
+          console.error('Error creating inventory record:', error);
+        });
+    };
+  
     return (
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Stock</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Add stock form */}
-          <Form>
-            {/* Include form fields for adding stock */}
-            {/* For example, product selection, quantity, etc. */}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary">
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <div>
+        <h2>Create Inventory Record</h2>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Product:
+            <select name="product" value={formData.product} onChange={handleChange} required>
+              <option value="" disabled>Select a product</option>
+              {productList.map(product => (
+                <option key={product.product_id} value={product.product_id}>
+                  {product.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <br />
+          <label>
+            Stock Status:
+            <select name="stock_status" value={formData.stock_status} onChange={handleChange} required>
+              {statusOptions.map(status => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </label>
+          <br />
+          {/* Add other form fields for inventory data */}
+          {/* Example: */}
+          <label>
+            Purchased Stock:
+            <input
+              type="number"
+              name="purchased_stock"
+              value={formData.purchased_stock}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <br />
+          {/* Add more form fields as needed */}
+          <button type="submit">Create Inventory Record</button>
+        </form>
+      </div>
     );
   };
+
+  const AddStockModal = ({ show, handleClose }) => {
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Add New Product</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {/* Use the InventoryForm component for adding a new product */}
+        <InventoryForm onClose={handleClose} />
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+        {/* Remove the Save Changes button as it is handled in the InventoryForm */}
+      </Modal.Footer>
+    </Modal>
+  );
+};
 
   return (
     <div className="main-product-components">

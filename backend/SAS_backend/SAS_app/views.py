@@ -222,6 +222,7 @@ def Get_category_details(request, category_id=1):
         products_nearly_sold_out = ProductItem.objects.filter(product__product_category=category_id,inventory__stock__lt=5).values('product__name').annotate(
             nearly_sold_out_products=Count('id', distinct=True))
 
+        products_of_cat=Product.objects.filter(product_category=category_id).values()
         # Response with all details
         response_data = {
             'expired_products': products_with_expired_items,
@@ -229,6 +230,7 @@ def Get_category_details(request, category_id=1):
             'good_stock_products': products_with_good_stock,
             'out_of_stock_products': products_out_of_stock,
             'nearly_sold_out_products': products_nearly_sold_out,
+            "products_of_cat":products_of_cat,
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
@@ -276,6 +278,13 @@ def Calculate_metrics(request):
         all_orders_with_total_profit_price = Order.objects.aggregate(
             total_cost_price=total_cost_price- (F('sale__total_amount'))
         ).values()
+        all_orders_with_total_profit_price_alt = Sale.objects.values("order").annotate( profit=Sum(F('total_amount'))-Sum(
+            ((F('product__inventory__stock_expense') + F('product__inventory__other_expense')) /
+            F('product__inventory__purchased_stock'))*F('quantity'),
+            output_field=DecimalField()
+        ))
+        all_orders_with_total_profit_price_alt_count=all_orders_with_total_profit_price_alt.count()
+        total_profit = all_orders_with_total_profit_price_alt.aggregate(total_profit=Sum('profit'))['total_profit'] or 0
         productitems = ProductItem.objects.filter(  Q( sold=False ,damaged=True) | Q(sold=False ,inventory__expiry__lt=timezone.now()))
         productitems_loss_dam_ex=productitems.aggregate( total_loss  =  Sum(
             (F('inventory__stock_expense') + F('inventory__other_expense')) /
@@ -323,6 +332,9 @@ def Calculate_metrics(request):
             "today_orders_revenue": today_revenue,
             "today_orders_cost_price": today_cost_price,
             "today_orders_profit_price": today_profit_price,
+            "all_orders_with_total_profit_price_alt":all_orders_with_total_profit_price_alt,
+            "all_orders_with_total_profit_price_alt_count":all_orders_with_total_profit_price_alt_count,
+            "total_profit":total_profit,
         }, status=status.HTTP_200_OK)
 
     except Exception as e:
@@ -337,10 +349,10 @@ def Category_sales(request):
             total_sales_by_cat=Count("quantity")
         )
         product_sales=Sale.objects.values("product__product").annotate(
-            total_sales_by_cat=Sum("quantity")
+            total_sales_by_pro=Sum("quantity")
         )
         product_revenue=Sale.objects.values("product__product").annotate(
-            total_sales_by_cat=Sum("total_amount")
+            total_revenue_by_pro=Sum("total_amount")
         )
 
         return Response({
@@ -353,11 +365,20 @@ def Category_sales(request):
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
-def Monthwise_revenue(request):
+def Monthwise_data(request):
     try:
+        # Monthly Revenue
         monthly_revenue = Order.objects.values('created_at__year', 'created_at__month').annotate(
             total_revenue=Sum('total_price'),
             order_count=Count('order_id')
+        )
+
+        # Monthly Expense
+        monthly_expense = Inventory.objects.values('date_of_purchase__year', 'date_of_purchase__month').annotate(
+            total_stock_expense=Sum('stock_expense'),
+            total_other_expense=Sum('other_expense'),
+            total_expense=Sum('stock_expense') + Sum('other_expense'),
+            stock_count=Count('inventory_id')
         )
 
         result = []
@@ -367,9 +388,24 @@ def Monthwise_revenue(request):
                 'month_year': month_year,
                 'total_revenue': entry['total_revenue'],
                 'order_count': entry['order_count'],
+                'total_stock_expense': 0,
+                'total_other_expense': 0,
+                'total_expense': 0,
+                'stock_count': 0,
             })
 
-        return Response({'monthly_revenue': result})
+        for entry in monthly_expense:
+            month_year = datetime(entry['date_of_purchase__year'], entry['date_of_purchase__month'], 1)
+            matching_entry = next((item for item in result if item['month_year'] == month_year), None)
+            if matching_entry:
+                matching_entry.update({
+                    'total_stock_expense': entry['total_stock_expense'],
+                    'total_other_expense': entry['total_other_expense'],
+                    'total_expense': entry['total_expense'],
+                    'stock_count': entry['stock_count'],
+                })
+
+        return Response({'monthly_data': result})
 
     except Exception as e:
         return Response({'error': str(e)}, status=500)

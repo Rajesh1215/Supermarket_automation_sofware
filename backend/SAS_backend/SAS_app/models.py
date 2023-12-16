@@ -5,7 +5,7 @@ import datetime
 
     
 class ProductCategory(models.Model):
-    product_category_id = models.IntegerField(primary_key=True)
+    product_category_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50,null=False)
 
     def __str__(self):
@@ -33,7 +33,7 @@ class Employee(models.Model):
         return self.name
 
 class Product(models.Model):
-    product_id = models.IntegerField(primary_key=True)
+    product_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100,null=False)
     product_category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE,null=False)
     description = models.TextField()
@@ -56,7 +56,7 @@ class Inventory(models.Model):
         ('sold', 'Sold'),
     ]
 
-    inventory_id = models.IntegerField(primary_key=True)
+    inventory_id = models.AutoField(primary_key=True)  # Use AutoField for auto-incrementing
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     stock_status = models.CharField(max_length=50, choices=STOCK_STATUS_CHOICES)
     purchased_stock = models.IntegerField()

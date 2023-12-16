@@ -1,56 +1,40 @@
-import React,{useState} from "react";
-import { Carousel, Image, Row, Col, ListGroup, ListGroupItem,Button,Modal,Form } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Modal, Button, Table,Image,Carousel } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const ProductDetails = ({ product }) => {
-  const {
-    images,
-    name,
-    price,
-    sales,
-    revenue,
-    description,
-    specs,
-    inventory,
-  } = product;
+const ProductDetails = () => {
+  const [productData, setProductData] = useState({});
+  const [inventoryData, setInventoryData] = useState({});
+  const [showModal, setShowModal] = useState(false);
 
-  const { present, expired, expiring, damaged, returned } = inventory;
+  useEffect(() => {
+    // Fetch product data
+    axios.get('http://127.0.0.1:8000/products/1')
+      .then(response => setProductData(response.data))
+      .catch(error => console.error('Error fetching product data:', error));
 
-  const [showSeeItems, setShowSeeItems] = useState(false);
-  const handleshowSeeItems = () => setShowSeeItems(true);
-  const handleCloseModals = () => {
-    setShowSeeItems(false);};
+    // Fetch inventory data
+    axios.get('http://127.0.0.1:8000/get_product_details/1/')
+      .then(response => setInventoryData(response.data))
+      .catch(error => console.error('Error fetching inventory data:', error));
+  }, []);
 
-    const SeeItems = ({ show, handleClose }) => {
-      return (
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add Stock</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {/* Add stock form */}
-            <Form>
-              {/* Include form fields for adding stock */}
-              {/* For example, product selection, quantity, etc. */}
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="primary">
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      );
-    };
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   return (
-    <div className="product-details">
-      <Row>
-        <Col sm={6}>
-          <Carousel>
-            {images.map((imageName, index) => (
+    <div>
+      <h1>{productData.name} Details</h1>
+      <div className='row'>
+        <div  className='col-6'>
+        <Carousel>
+            {[1,2,3].map((imageName, index) => (
               <Carousel.Item key={index}>
                 <Image
                   src={`https://via.placeholder.com/800x400`}
@@ -60,91 +44,79 @@ const ProductDetails = ({ product }) => {
               </Carousel.Item>
             ))}
           </Carousel>
-        </Col>
-        <Col sm={6}>
-          <h1 className="product-name">{name}</h1>
-          <p>Price: ${price.toFixed(2)}</p>
-          <div className="product-stats">
-            <span className="product-stat">Sales: {sales}</span>
-            <span className="product-stat">Revenue: ${revenue.toFixed(2)}</span>
-          </div>
-          
-          <hr />
-          <h3>Inventory Details</h3>
-          <ListGroup>
-            <ListGroupItem>
-              <span className="inventory-label">Present:</span>
-              <span className="inventory-count">{present}</span>
-            </ListGroupItem>
-            <ListGroupItem>
-              <span className="inventory-label">Expired:</span>
-              <span className="inventory-count">{expired}</span>
-            </ListGroupItem>
-            <ListGroupItem>
-              <span className="inventory-label">Nearly Expiring:</span>
-              <span className="inventory-count">{expiring}</span>
-            </ListGroupItem>
-            <ListGroupItem>
-              <span className="inventory-label">Damaged:</span>
-              <span className="inventory-count">{damaged}</span>
-            </ListGroupItem>
-            <ListGroupItem>
-              <span className="inventory-label">Returned:</span>
-              <span className="inventory-count">{returned}</span>
-            </ListGroupItem>
-          </ListGroup>
-          
-        </Col>
-        <Col >
-        <Button onClick={handleshowSeeItems}>See Items</Button>
-        <hr />
-          <h3>Product Specifications</h3>
-          <ListGroup>
-            {Object.entries(specs).map(([key, value]) => (
-              <ListGroupItem key={key}>
-                <span className="spec-key">{key.replace(/_/g, " ")}:</span>
-                <span className="spec-value">{value}</span>
-              </ListGroupItem>
-            ))}
-          </ListGroup>
-        <hr />
-          <h3>Overall Information</h3>
-          <p>
-            {/* Describe overall details about brought, sold, and remaining items */}
-            This product has been purchased {/* total bought */} times, with {sales}
-            being sold and {present} remaining in stock.
-          </p>
-          <p>{description}</p>
-        </Col>
-      </Row>
-      <SeeItems show={showSeeItems} handleClose={handleCloseModals} />
+        </div>
+      <div className='col-6'>
+        <h2>Product Information</h2>
+        <p>Product ID: {productData.product_id}</p>
+        <p>Name: {productData.name}</p>
+        <p>Description: {productData.description}</p>
+        <p>Price: {productData.price}</p>
+        <p>Product Category: {productData.product_category}</p>
+      </div>
+      </div>
+      <hr/>
+      <div>
+        <div className='d-flex justify-content-between'>
+        <p>Status: {inventoryData.status}</p>
+        <p>Verified Items Count: {inventoryData.verified_items_count}</p>
+        <p>Unverified Items Count: {inventoryData.unverified_items_count}</p>
+        <p>Expired Items Count: {inventoryData.expired_items_count}</p>
+        <p>Nearly Expiring Items Count: {inventoryData.nearly_expired_items_count}</p>
+        <p>No. of  items sold: {inventoryData.sold_items && inventoryData.sold_items.length}</p>
+        </div>
+
+        <Button variant="primary" className='m-3' onClick={openModal}>
+          View Unsold Items
+        </Button>
+      </div>
+
+      {/* React Bootstrap Modal */}
+      <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Unsold Items</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Product Information</h4>
+          <p>Product ID: {productData.product_id}</p>
+          <p>Name: {productData.name}</p>
+          <p>Description: {productData.description}</p>
+          <p>Price: {productData.price}</p>
+          <p>Product Category: {productData.product_category}</p>
+
+          <h4>Unsold Items</h4>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Product ID</th>
+                <th>Inventory ID</th>
+                <th>Damaged</th>
+                <th>Sold</th>
+                <th>Verified</th>
+              </tr>
+            </thead>
+            <tbody>
+              {inventoryData.unsold_items && inventoryData.unsold_items.map(item => (
+                <tr key={item.id}>
+                  <td>{item.id}</td>
+                  <td>{item.product_id}</td>
+                  <td>{item.inventory_id}</td>
+                  <td>{item.damaged ? 'Yes' : 'No'}</td>
+                  <td>{item.sold ? 'Yes' : 'No'}</td>
+                  <td>{item.verified ? 'Yes' : 'No'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
 
-const sampleProduct = {
-  images: ["image1.jpg", "image2.jpg"], // Assuming your images are in the public/images directory
-  name: "Sample Product",
-  price: 49.99,
-  sales: 100,
-  revenue: 4999.0,
-  description: "This is a sample product description.",
-  specs: {
-    brand: "Sample Brand",
-    color: "Red",
-    weight: "2 lbs",
-  },
-  inventory: {
-    present: 50,
-    expired: 10,
-    expiring: 5,
-    damaged: 2,
-    returned: 3,
-  },
-};
-
-const ProductDetailsExample = () => {
-  return <ProductDetails product={sampleProduct} />;
-};
-
-export default ProductDetailsExample;
+export default ProductDetails;

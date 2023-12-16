@@ -18,7 +18,7 @@ from .views import (
     Get_category_details,
     Calculate_metrics,
     Category_sales,
-    Monthwise_revenue,
+    Monthwise_data,
     LoginView
 )
 
@@ -44,7 +44,7 @@ urlpatterns = [
     path('get_category_details/<int:category_id>/', Get_category_details, name='get_category'),
     path('calculate_metrics/', Calculate_metrics, name='calculate_metrics'),
     path("category_sales/",Category_sales, name='get_category_sales'),
-    path("monthwise_revenue/",Monthwise_revenue, name='get_monthwise_revenue'),
+    path("Monthwise_data/",Monthwise_data, name='get_Monthwise_data'),
     path('login/', LoginView.as_view(), name='login')
 ]
 

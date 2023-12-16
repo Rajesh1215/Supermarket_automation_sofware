@@ -1,35 +1,228 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import "./sales.css";
 import DoughnutChart from "../charts/doughnut.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { Modal, Button, Table } from "react-bootstrap";
+
 const Sales = () => {
-  const navigate = useNavigate();
-  const gotopage = (str) => {
-    navigate(str);
-  };
+  const [orders, setOrders] = useState([]);
+
+
+  // const [metrics, setmetrics] = useState([]);
+  useEffect(() => {
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       "http://127.0.0.1:8000/calculate_metrics/"
+    //     );
+    //     const data = response.data;
+    //     setmetrics(data);
+    //     console.log("Metrics data:", data);
+    //     // Handle the data as needed
+    //   } catch (error) {
+    //     console.error("Error fetching metrics data:", error);
+    //     // Handle errors
+    //   }
+    // };
+
+    const fetchDataOrders = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/orders/");
+        const ordersData = response.data;
+        setOrders(ordersData);
+      } catch (error) {
+        console.error("Error fetching orders data:", error);
+      }
+    };
+
+    fetchDataOrders();
+
+    // Call the function to fetch data when the component mounts
+    // fetchData();
+  }, []);
+
+
+ 
   return (
     <div className="sales-main-container">
       <div className="search-component d-flex justify-content-between ">
         <div>
           <h2>Orders</h2>
         </div>
-        <div className="products-num-stats d-flex justify-content-around">
-          <div className="products-purchase mx-3">• Purchased:200</div>
-          <div className="products-sold mx-3">• Sold:100</div>
-          <div className="products-stock mx-3">• In Stock:100</div>
-        </div>
+        <div className="products-num-stats d-flex justify-content-around"></div>
       </div>
 
       <div className="product-statuses row flex-wrap align-items-center">
-        <div className="col-3">
+      <div className="col-7 row">
+        <OrderListComponent/>
+        </div>
+
+        <div className="col-5 instock-graph d-flex justify-content-center">
+          <StockChart/>
+        </div>
+      </div>
+
+      <div className="mt-5 mb-1">
+        <h2>Orders</h2>
+      </div>
+      <div className=" mx-3 my-3 d-flex justify-content-between">
+        <div className="search-input d-flex w-50">
+          <FontAwesomeIcon icon={faSearch} className="ml-2 mx-2" />
+          <input type="text" className="border-0" placeholder="Search Orders" />
+        </div>
+        <div className=" mx-5 my-2">
+          <b>From :</b>
+          <input
+            type="date"
+            className="bg-white border-0 mx-3"
+            placeholder="Start Date"
+          />
+          <b>To :</b>
+          <input
+            type="date"
+            className="bg-white border-0 mx-3"
+            placeholder="End Date"
+          />
+        </div>
+      </div>
+
+      <div className="all-sales">
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              {/* <th>Product</th>
+            <th>Quantity</th> */}
+              <th>Price</th>
+              <th>Total</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.order_id}>
+                <td>{order.order_id}</td>
+                {/* Add customer and product information here based on your data structure */}
+                <td>{order.customer_id}</td>
+                {/* <td>{/* Product information }</td>
+              <td>{/* Quantity }</td> */}
+                <td>{`$${order.total_price}`}</td>
+                <td>{`$${order.total_price}`}</td>
+                <td>{new Date(order.created_at).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+const ReturnsComponent = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [returnsData, setReturnsData] = useState([]);
+  const [returnslength, setReturnslength] = useState(0);
+  const handleShowModal = () => {
+    setShowModal(true);
+    fetchDataReturns();
+  };
+
+  const handleHideModal = () => {
+    setShowModal(false);
+  };
+  useEffect(() => {
+    fetchDataReturns();
+  }, []);
+
+  const fetchDataReturns = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/returns/");
+      setReturnsData(response.data);
+      setReturnslength(response.data.length);
+    } catch (error) {
+      console.error("Error fetching returns data:", error);
+    }
+  };
+
+  return (
+    <div>
+      <div className="product-count mx-2">Total returns: {returnslength}</div>
+      <Button variant="primary" onClick={handleShowModal} className="my-2">
+        Open Returns Modal
+      </Button>
+
+      <Modal show={showModal} onHide={handleHideModal} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Returns Data</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Return ID</th>
+                <th>Product Item ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              {returnsData.map((item) => (
+                <tr key={item.return_id}>
+                  <td>{item.return_id}</td>
+                  <td>{item.product_item_id}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleHideModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+};
+
+export function OrderListComponent(){
+  const [metrics, setmetrics] = useState([]);
+  const navigate = useNavigate();
+  const gotopage = (str) => {
+    navigate(str);
+  };
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/calculate_metrics/"
+      );
+      const data = response.data;
+      setmetrics(data);
+      // Handle the data as needed
+    } catch (error) {
+      console.error("Error fetching metrics data:", error);
+      // Handle errors
+    }
+  }
+  fetchData();
+});
+  return (
+    <div className="col-12 row">
+        <div className="col-5">
           <div className="mb-3 out-of-stocks">
-            <div className="instock-heading mx-2">Total Orders Today</div>
+            <div className="instock-heading mx-2">Orders details</div>
             <hr />
             <div className="">
-              <div className="product-count mx-2">Total Orders: 500</div>
-              <div className="items-count mx-2">Returns Count: 50</div>
+              <div className="product-count mx-2">
+                Total orders:
+                {metrics.all_orders_with_total_profit_price_alt_count}
+              </div>
+              <div className="items-count mx-2">
+                Total Profit in: {metrics.total_profit}
+              </div>
             </div>
           </div>
 
@@ -44,104 +237,81 @@ const Sales = () => {
             </div>
             <hr />
             <div className="">
-              <div className="product-count mx-2">Total returns: 1500</div>
-              <div className="items-count mx-2">Overall Returns: 100</div>
+              <ReturnsComponent />
             </div>
           </div>
         </div>
 
-        <div className="col-4">
+        <div className="col-7">
           <div className="mb-3 out-of-stocks">
-            <div className="instock-heading mx-2">Total Revenue Today</div>
+            <div className="instock-heading mx-2">Income details</div>
             <hr />
             <div className="">
               <div className="product-count mx-2">
-                Total Revenue Generated: $2000
+                Total Expense: {metrics.total_expense}
               </div>
-              <div className="items-count mx-2">Total Profit Today: $800</div>
+              <div className="items-count mx-2">
+                Revenue by sales: {metrics.total_revenue}
+              </div>
             </div>
           </div>
 
           <div className="expired">
-            <div className="instock-heading mx-2">
-              Total revenue of the Year
-            </div>
+            <div className="instock-heading mx-2">Total Orders Today</div>
             <hr />
             <div className="">
               <div className="product-count mx-2">
-                Total Revenue in this year: $10,000
+                Total Revenue: {metrics.today_orders_revenue}
               </div>
               <div className="items-count mx-2">
-                Total Profit in this year: $4,000
+                Cost price :{metrics.today_orders_cost_price}
+              </div>
+              <div className="items-count mx-2">
+                Profit :{metrics.today_orders_profit_price}
               </div>
             </div>
           </div>
         </div>
+      </div>
+  )
+}
 
-        <div className="col-5 instock-graph d-flex justify-content-center">
-          <DoughnutChart />
-        </div>
-      </div>
+export function StockChart() {
+  const [categorySalesData, setCategorySalesData] = useState(null);
+  const [categoryNames, setCategoryNames] = useState(null);
 
-      <div className="mt-5 mb-1">
-        <h2>Orders</h2>
-      </div>
-      <div className=" mx-3 my-3 d-flex justify-content-between">
-        <div className="search-input d-flex w-50"><FontAwesomeIcon icon={faSearch} className="ml-2 mx-2" />
-        <input type="text" className="border-0" placeholder="Search Orders" /></div>
-        <div className=" mx-5 my-2">
-         <b>From :</b><input type="date" className="bg-white border-0 mx-3" placeholder="Start Date" />
-        <b>To :</b><input type="date" className="bg-white border-0 mx-3" placeholder="End Date" />
-        </div>
-      </div>
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch category sales data
+        const categorySalesResponse = await axios.get("http://127.0.0.1:8000/category_sales/");
+        setCategorySalesData(categorySalesResponse.data.category_sales_data);
 
-      <div className="all-sales">
-        <table
-          className="table table-striped ">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Customer</th>
-              <th>Product</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Total</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1001</td>
-              <td>John Doe</td>
-              <td>Laptop</td>
-              <td>1</td>
-              <td>$1000</td>
-              <td>$1000</td>
-              <td>2023-11-27</td>
-            </tr>
-            <tr>
-              <td>1002</td>
-              <td>Jane Smith</td>
-              <td>Phone</td>
-              <td>2</td>
-              <td>$500</td>
-              <td>$1000</td>
-              <td>2023-11-26</td>
-            </tr>
-            <tr>
-              <td>1003</td>
-              <td>Peter Jones</td>
-              <td>Tablet</td>
-              <td>1</td>
-              <td>$300</td>
-              <td>$300</td>
-              <td>2023-11-25</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+        // Fetch category names
+        const categoryNamesResponse = await axios.get("http://127.0.0.1:8000/productcategories/");
+        setCategoryNames(categoryNamesResponse.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <>
+      {categorySalesData && categoryNames ? (
+        <DoughnutChart
+          categorySalesData={categorySalesData.map(item => ({
+            ...item,
+            categoryName: categoryNames.find(category => category.product_category_id === item.product__product__product_category)?.name,
+          }))}
+        />
+      ) : (
+        <div>Loading...</div>
+      )}
+    </>
   );
-};
+}
 
 export default Sales;
