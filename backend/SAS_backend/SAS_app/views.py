@@ -15,6 +15,11 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+import json
+from datetime import timedelta
+
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
@@ -110,7 +115,7 @@ def Statistics(request):
     # Grouped count of items by category
     items_by_category = ProductItem.objects.values('product__product_category__name').annotate(item_count=Count('id'))
 
-    Have_to_add = Inventory.objects.filter(stock_status='have to add').values('stock_status').aggregate(Total_stock=Sum('purchased_stock'))
+    Have_to_add = Inventory.objects.filter(stock_status='have to add').values('stock_status').aggregate(Total_stock=Sum('purchased_stock'))['Total_stock']
 
     return Response({
         'total_categories': total_categories,
@@ -349,13 +354,13 @@ def Category_sales(request):
     try:
         # Annotate each sale with the total sales amount (sales * quantity)
         # Coalesce is used to handle cases where quantity is NULL
-        catogary_sales=Sale.objects.values("product__product__product_category").annotate(
+        catogary_sales=Sale.objects.values("product__product_category").annotate(
             total_sales_by_cat=Count("quantity")
         )
-        product_sales=Sale.objects.values("product__product").annotate(
+        product_sales=Sale.objects.values("product").annotate(
             total_sales_by_pro=Sum("quantity")
         )
-        product_revenue=Sale.objects.values("product__product").annotate(
+        product_revenue=Sale.objects.values("product").annotate(
             total_revenue_by_pro=Sum("total_amount")
         )
 
@@ -443,3 +448,59 @@ class LoginView(APIView):
         except Employee.DoesNotExist:
             # User with the provided username does not exist
             return Response({'error': 'Invalid username or password'})
+        
+from django.db import transaction
+
+
+
+@csrf_exempt
+@require_POST
+def Make_order(request):
+    try:
+        # Get the JSON data from the request body
+        data = json.loads(request.body.decode('utf-8'))
+
+        # Assuming the form fields are sent as an array named 'orderItems'
+        order_items = data.get('orderItems', [])
+
+        # Step 1: Set 'sold' to True for each ProductItem in the list
+        for item in order_items:
+            product_item_id = item.get('productItemId', '')
+            # Assuming product_item_id is a string
+            product_item = ProductItem.objects.get(id=product_item_id)
+            product_item.sold = True
+            product_item.save()
+
+        # Step 2: Count the number of products based on all ProductItem instances in the list
+        total_quantity = len(order_items)
+        order = Order.objects.create(total_price=0, customer_id=0, created_at=timezone.now())
+        latest_order = Order.objects.latest('order_id')
+
+        # Step 3: Create records in the Sale model for each product
+        sales = []
+        for item in order_items:
+            
+            product_item_id = item.get('productItemId', '')
+            product_item = ProductItem.objects.get(id=product_item_id)
+            product = product_item.product
+            product_price = product.price
+            quantity = 1  # Assuming each ProductItem corresponds to one quantity
+            total_amount = quantity * product_price
+
+            # Create a record in the Sale model
+            sale = Sale.objects.create(order_id=latest_order.order_id, product=product, quantity=quantity, product_price=product_price, total_amount=total_amount)
+            sales.append(sale)
+
+        # Step 4: Calculate the total amount for the order based on the sales
+        total_amount = sum(sale.total_amount for sale in sales)
+
+        # Step 5: Create a record in the Order model with the calculated total amount
+        order=Order.objects.get(order_id=latest_order.order_id)
+        order.total_price = total_amount
+        order.save()
+        # Return a success response
+        return JsonResponse({'message': 'Order placed successfully.', 'order_items': order_items})
+
+    except Exception as e:
+        # Return an error response
+        return JsonResponse({'error': str(e)}, status=500)

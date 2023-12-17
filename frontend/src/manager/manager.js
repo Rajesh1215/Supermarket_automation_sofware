@@ -16,10 +16,10 @@ import EmployeeDetails from './employees/empolyee_det';
 import ProductDetailsExample from "./products/product_det"
 import Community from './employees/community';
 import CustomerPage from './customers/customer_det';
-import Profile from "./profile/profile";
 import { Container, Row, Col } from 'react-bootstrap';
+import Profile from './profile/profile';
 
-const Owner = () => {
+const Manager = () => {
   return (
     <Container fluid>
       <Row>
@@ -31,17 +31,17 @@ const Owner = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/catogaries" element={<Allproducts />} />
-            <Route path="/products/catogaries/product_details" element={<ProductDetailsExample />} />
+            <Route path="/products/catogaries/product_details/:product_id" element={<ProductDetailsExample />} />
             <Route path="/employees" element={<Employees />} /> {/* Add the forward slash here */}
-            <Route path="/employees/employee-details" element={<EmployeeDetails />} />
+            <Route path="/employees/employee-details/:employee_id" element={<EmployeeDetails />} />
             <Route path="/community" element={<Community />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/customers/customer-details" element={<CustomerPage />} />
             <Route path="/sales" element={<Sales />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/sales/orders" element={<Orders />} />
+            <Route path="/sales/orders/:order_id" element={<Orders />} />
             <Route path="/sales/returns" element={<Returns />} />
             <Route path="/reports" element={<Reports />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </Col>
       </Row>
@@ -49,4 +49,4 @@ const Owner = () => {
   );
 };
 
-export default Owner;
+export default Manager;

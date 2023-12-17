@@ -10,9 +10,6 @@ const Sidebar = () => {
           <Link to="/manager">Dashboard</Link>
         </li>
         <li>
-          <Link to="/manager/profile">Profile</Link>
-        </li>
-        <li>
           <Link to="/manager/products">Products</Link>
         </li>
         <li>
@@ -26,6 +23,9 @@ const Sidebar = () => {
         </li>
         <li>
           <Link to="/manager/reports">Reports</Link>
+        </li>
+        <li>
+          <Link to="/manager/profile">Profile</Link>
         </li>
       </ul>
     </div>

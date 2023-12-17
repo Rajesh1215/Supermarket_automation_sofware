@@ -140,12 +140,12 @@ export function Top5BarchartsSalesRevenueStock() {
       <div className="high-sales-products px-3 w-50">
         <h4>Top 5 High Sales by products</h4>
         {/* Pass the top 5 sales data objects to the BarChart component */}
-        <Barchart labels={salesData.map(item => productNames[item.product__product])} data={salesData.map(item => item.total_sales_by_pro)} />
+        <Barchart labels={salesData.map(item => productNames[item.product])} data={salesData.map(item => item.total_sales_by_pro)} />
       </div>
       <div className="high-revenue-products px-3 w-50">
         <h4>Top 5 High Profits by products</h4>
         {/* Pass the top 5 revenue data objects to the BarChart component */}
-        <Barchart labels={revenueData.map(item => productNames[item.product__product])} data={revenueData.map(item => item.total_revenue_by_pro)} />
+        <Barchart labels={revenueData.map(item => productNames[item.product])} data={revenueData.map(item => item.total_revenue_by_pro)} />
       </div>
     </div>
   );

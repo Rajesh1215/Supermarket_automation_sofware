@@ -19,7 +19,7 @@ const Staff = () => {
             <Routes>
               <Route path="/" element={<Profile />} />
               <Route path="/products" element={<Products />} />
-              <Route path="/products/product_details" element={<ProductDetailsExample />} />
+              <Route path="/products/product_details/:product_id" element={<ProductDetailsExample />} />
               <Route path="/sales" element={<Sales />} />
               <Route path="/sales/returns" element={<Returns />} />
             </Routes>

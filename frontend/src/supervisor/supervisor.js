@@ -8,6 +8,7 @@ import Sidebar from './sidebar';
 import { Container, Row, Col } from 'react-bootstrap';
 import Returns from './sales/returns';
 import ProductDetailsExample from './products/product_det';
+import Orders from './sales/orders';
 
 const Owner = () => {
   return (
@@ -23,7 +24,8 @@ const Owner = () => {
               <Route path="/register" element={<Employees />} />
               <Route path="/sales" element={<Sales />} />
               <Route path="/sales/returns" element={<Returns />} />
-              <Route path="/products/product_details" element={<ProductDetailsExample />} />
+              <Route path="/products/product_details/:product_id" element={<ProductDetailsExample />} />
+              <Route path="/sales/orders/:order_id" element={<Orders />} />
             </Routes>
           </Col>
         </Row>

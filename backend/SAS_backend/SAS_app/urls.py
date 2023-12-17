@@ -21,6 +21,7 @@ from .views import (
     Monthwise_data,
     LoginView,
     Order_sales,
+    Make_order
 )
 
 router = DefaultRouter()
@@ -48,6 +49,7 @@ urlpatterns = [
     path("category_sales/",Category_sales, name='get_category_sales'),
     path("Monthwise_data/",Monthwise_data, name='get_Monthwise_data'),
     path('login/', LoginView.as_view(), name='login'),
+    path('make_order/', Make_order, name='make_order'),
     
 ]
 

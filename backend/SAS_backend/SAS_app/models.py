@@ -70,7 +70,7 @@ class Inventory(models.Model):
         return str(self.inventory_id)
 
 class ProductItem(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.CharField(max_length=100,primary_key=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE)
     damaged = models.BooleanField(default=False)
@@ -91,8 +91,8 @@ class Order(models.Model):
 
 class Sale(models.Model):
     sale_id = models.IntegerField(primary_key=True)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.OneToOneField(ProductItem, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE,null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     product_price = models.DecimalField(max_digits=10, decimal_places=2)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, editable=False)

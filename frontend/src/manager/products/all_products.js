@@ -1,103 +1,111 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Nav, Tab, Row, Col, Container,Card } from "react-bootstrap";
+import { Nav, Row, Col, Container, Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch,faFilter } from "@fortawesome/free-solid-svg-icons";
-import { useUserContext } from "../../data/data";
-
-
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 const AllProducts = () => {
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeCategory, setActiveCategory] = useState("all");
   const navigate = useNavigate();
+  const [productCategories, setProductCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categoriesResponse = await axios.get('http://127.0.0.1:8000/productcategories/');
+        setProductCategories(categoriesResponse.data);
 
-  const goto_prodet = () => {
-    navigate("product_details");
-  };
-  const { Products } = useUserContext();
-  const { Product_categories } = useUserContext();
-  const renderProducts = (category) => {
-    const selectedProducts = category === "all" ? Product_categories.all : Product_categories[category] || [];
+        const productsResponse = await axios.get('http://127.0.0.1:8000/products/');
+        const newFilteredProducts = selectedCategory === "all"
+          ? productsResponse.data
+          : productsResponse.data.filter(product => product.product_category === selectedCategory);
 
-    return (
-      <Row>
-        {selectedProducts.map((product) => (
-          <Col key={product.id} sm={4}>
-            <div className={`product-card ${product.status}`}>{product.name}</div>
-          </Col>
-        ))}
-      </Row>
-    );
-  };
-  const FilterComponent = () => {
-    const [showFilters, setShowFilters] = useState(false);
-  
-    const toggleFilters = () => {
-      setShowFilters((prevShowFilters) => !prevShowFilters);
+        setFilteredProducts(newFilteredProducts);
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
-  
-    const handleFilterClick = (filter) => {
-      // Handle filter selection here
-      console.log("Selected filter:", filter);
-    };
-  
-    const filterOptions = [
-      "In Stock",
-      "Nearly Out of Stock",
-      "Out of Stock",
-      "Nearly Expiring",
-      "Expired",
-      "Damaged",
-      "Returned",
-    ];
-  
-    return (
-      <div className=" my-3 mx-1 filter-container d-flex">
-        
-        <div className="filter-icon mx-1" onClick={toggleFilters}>
-          <FontAwesomeIcon icon={faFilter} />
-        </div>
-        <div className="filter-text" onClick={toggleFilters}>
-          Filter
-        </div>
-        {showFilters && (
-          <div className="filter-options d-flex">
-            {filterOptions.map((filter, index) => (
-              <div className=" mx-2" key={index} onClick={() => handleFilterClick(filter)}>
-                {filter}
-              </div>
-            ))}
-          </div>
-        )}
-        
-      </div>
-    );
+
+    fetchData();
+  }, [selectedCategory]);
+
+  const handleTabClick = (category) => {
+    setActiveCategory(category.name.toLowerCase());
+    setSelectedCategory(category.product_category_id);
+    setSearchTerm(''); // Reset search term when changing tabs
   };
+
+  const goto_prodet = (id = 1) => {
+    navigate(`product_details/${id}`);
+  };
+
+  // const FilterComponent = () => {
+  //   const [showFilters, setShowFilters] = useState(false);
+
+  //   const toggleFilters = () => {
+  //     setShowFilters((prevShowFilters) => !prevShowFilters);
+  //   };
+
+  //   const handleFilterClick = (filter) => {
+  //     console.log("Selected filter:", filter);
+  //   };
+
+  //   const filterOptions = [
+  //     "In Stock",
+  //     "Nearly Out of Stock",
+  //     "Out of Stock",
+  //     "Nearly Expiring",
+  //     "Expired",
+  //     "Damaged",
+  //     "Returned",
+  //   ];
+
+  //   return (
+  //     <div className="my-3 mx-1 filter-container d-flex">
+  //       <div className="filter-icon mx-1" onClick={toggleFilters}>
+  //         <FontAwesomeIcon icon={faFilter} />
+  //       </div>
+  //       <div className="filter-text" onClick={toggleFilters}>
+  //         Filter
+  //       </div>
+  //       {showFilters && (
+  //         <div className="filter-options d-flex">
+  //           {filterOptions.map((filter, index) => (
+  //             <div className="mx-2" key={index} onClick={() => handleFilterClick(filter)}>
+  //               {filter}
+  //             </div>
+  //           ))}
+  //         </div>
+  //       )}
+  //     </div>
+  //   );
+  // };
+
   const ProductCards = () => {
-    
-  
+    const filteredProductsByCategory = selectedCategory === "all"
+      ? filteredProducts
+      : filteredProducts.filter(product => product.product_category === selectedCategory);
+
+    const filteredProductsBySearch = filteredProductsByCategory.filter(product =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
       <Row xs={1} md={2} lg={4} className="g-4">
-        {Products.map((product) => (
-          <Col key={product.id}>
-            <Card onClick={goto_prodet}>
-              <Card.Img variant="top" className=" " src={`https://via.placeholder.com/400x300`} />
+        {filteredProductsBySearch.map((product) => (
+          <Col key={product.product_id}>
+            <Card onClick={() => { goto_prodet(product.product_id) }}>
+              <Card.Img variant="top" className="" src={`https://via.placeholder.com/400x300`} />
               <Card.Body>
                 <Card.Title>{product.name}</Card.Title>
                 <Card.Text>
                   <strong>Price:</strong> ${product.price}
                   <br />
-                  <strong>Items Present:</strong> {product.itemsPresent}
-                  <br />
-                  <strong>Expired:</strong> {product.expired}
-                  <br />
-                  <strong>Nearly Expired:</strong> {product.nearlyExpired}
-                  <br />
-                  <strong>Damaged:</strong> {product.damaged}
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -106,12 +114,19 @@ const AllProducts = () => {
       </Row>
     );
   };
+
   return (
     <div>
       <div className="search-component d-flex justify-content-between ">
         <div className="search-input mx-3 my-1">
           <FontAwesomeIcon icon={faSearch} className="ml-2 mx-2" />
-          <input type="text" className="border-0" placeholder="Search Products" />
+          <input
+            type="text"
+            className="border-0"
+            placeholder="Search Products"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
         <div className="products-num-stats d-flex justify-content-around">
           <div className="products-purchase mx-3">• Purchased:200</div>
@@ -120,27 +135,20 @@ const AllProducts = () => {
         </div>
       </div>
       <Container>
-        <Nav variant="tabs" className="mx-5" activeKey={activeTab} onSelect={(tab) => handleTabClick(tab)}>
-          {Product_categories.map((category) => (
+        <Nav variant="tabs" className="mx-5 mb-3">
+          {productCategories.map((category) => (
             <Nav.Item key={category.product_category_id}>
-              <Nav.Link eventKey={category.name.toLowerCase()}>
+              <Nav.Link
+                eventKey={category.name.toLowerCase()}
+                active={activeCategory === category.name.toLowerCase()}
+                onClick={() => { handleTabClick(category); console.log(category.name); }}
+              >
                 {category.name}
               </Nav.Link>
             </Nav.Item>
           ))}
         </Nav>
-        <FilterComponent />
-        <Tab.Content>
-          
-          {Product_categories.map((category) => (
-            <div>
-            <Tab.Pane key={category.product_category_id} eventKey={category.name.toLowerCase()}>
-              {renderProducts(category.name.toLowerCase())}
-            </Tab.Pane>
-            
-            </div>
-          ))}
-        </Tab.Content>
+        {/* <FilterComponent /> */}
         <ProductCards />
       </Container>
     </div>

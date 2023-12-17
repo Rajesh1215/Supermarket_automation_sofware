@@ -6,6 +6,7 @@ import 'chartjs-adapter-date-fns';
 Chart.register(LineController, LinearScale, PointElement, LineElement,TimeScale, Title,Legend);
 
 function LineChart({ data }) {
+  console.log('hi',data);
   // Check if data is null or empty
   if (!data || !data.length) {
     return <div>No data available</div>;

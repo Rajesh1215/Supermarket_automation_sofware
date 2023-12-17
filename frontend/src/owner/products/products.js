@@ -650,7 +650,7 @@ const Products = () => {
             <div className="instock-heading mx-2">Inventory</div>
             <hr />
             <div className="m-1 text-danger">
-            Haven't Add-{ statisticsData.Have_to_add.Total_stock}
+            Haven't Add-{ statisticsData.Have_to_add}
             </div>
             <div className="m-1 text-danger"> Unverified items-{statisticsData.unverified_items} </div>
             <div className="product-count mx-2">Out of stock-{statisticsData.out_of_stock}</div>

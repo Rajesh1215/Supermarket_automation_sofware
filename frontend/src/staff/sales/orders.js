@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./orders.css";
 import { useParams } from "react-router";
 import axios from "axios";
 import { Button, Table } from "react-bootstrap";
