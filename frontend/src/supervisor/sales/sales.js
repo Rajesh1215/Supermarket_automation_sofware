@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import "./sales.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { Modal, Button, Table } from "react-bootstrap";
+// import { Modal, Button, Table } from "react-bootstrap";
 
 const Sales = () => {
   const [orders, setOrders] = useState([]);
@@ -112,70 +112,70 @@ const Sales = () => {
   );
 };
 
-const ReturnsComponent = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [returnsData, setReturnsData] = useState([]);
-  const [returnslength, setReturnslength] = useState(0);
-  const handleShowModal = () => {
-    setShowModal(true);
-    fetchDataReturns();
-  };
+// const ReturnsComponent = () => {
+//   const [showModal, setShowModal] = useState(false);
+//   const [returnsData, setReturnsData] = useState([]);
+//   const [returnslength, setReturnslength] = useState(0);
+//   const handleShowModal = () => {
+//     setShowModal(true);
+//     fetchDataReturns();
+//   };
 
-  const handleHideModal = () => {
-    setShowModal(false);
-  };
-  useEffect(() => {
-    fetchDataReturns();
-  }, []);
+//   const handleHideModal = () => {
+//     setShowModal(false);
+//   };
+//   useEffect(() => {
+//     fetchDataReturns();
+//   }, []);
 
-  const fetchDataReturns = async () => {
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/returns/");
-      setReturnsData(response.data);
-      setReturnslength(response.data.length);
-    } catch (error) {
-      console.error("Error fetching returns data:", error);
-    }
-  };
+//   const fetchDataReturns = async () => {
+//     try {
+//       const response = await axios.get("http://127.0.0.1:8000/returns/");
+//       setReturnsData(response.data);
+//       setReturnslength(response.data.length);
+//     } catch (error) {
+//       console.error("Error fetching returns data:", error);
+//     }
+//   };
 
-  return (
-    <div>
-      <div className="product-count mx-2">Total returns: {returnslength}</div>
-      <Button variant="primary" onClick={handleShowModal} className="my-2">
-        Open Returns Modal
-      </Button>
+//   return (
+//     <div>
+//       <div className="product-count mx-2">Total returns: {returnslength}</div>
+//       <Button variant="primary" onClick={handleShowModal} className="my-2">
+//         Open Returns Modal
+//       </Button>
 
-      <Modal show={showModal} onHide={handleHideModal} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Returns Data</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Return ID</th>
-                <th>Product Item ID</th>
-              </tr>
-            </thead>
-            <tbody>
-              {returnsData.map((item) => (
-                <tr key={item.return_id}>
-                  <td>{item.return_id}</td>
-                  <td>{item.product_item_id}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleHideModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
-  );
-};
+//       <Modal show={showModal} onHide={handleHideModal} size="lg">
+//         <Modal.Header closeButton>
+//           <Modal.Title>Returns Data</Modal.Title>
+//         </Modal.Header>
+//         <Modal.Body>
+//           <Table striped bordered hover>
+//             <thead>
+//               <tr>
+//                 <th>Return ID</th>
+//                 <th>Product Item ID</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {returnsData.map((item) => (
+//                 <tr key={item.return_id}>
+//                   <td>{item.return_id}</td>
+//                   <td>{item.product_item_id}</td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </Table>
+//         </Modal.Body>
+//         <Modal.Footer>
+//           <Button variant="secondary" onClick={handleHideModal}>
+//             Close
+//           </Button>
+//         </Modal.Footer>
+//       </Modal>
+//     </div>
+//   );
+// };
 
 
 export default Sales;

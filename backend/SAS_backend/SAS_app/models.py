@@ -73,9 +73,9 @@ class ProductItem(models.Model):
     id = models.IntegerField(primary_key=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE)
-    damaged = models.BooleanField(default=True)
-    sold = models.BooleanField(default=True)
-    verified = models.BooleanField(default=True)
+    damaged = models.BooleanField(default=False)
+    sold = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id)
@@ -105,7 +105,7 @@ class Sale(models.Model):
         return str(self.sale_id)
 
 class Customer(models.Model):
-    customer_id = models.IntegerField(primary_key=True)
+    customer_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     place = models.CharField(max_length=50)
     dob = models.DateField()

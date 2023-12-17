@@ -40,6 +40,7 @@ const Products = () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/statistics/');
         setStatisticsData(response.data);
+        console.log(response.data)
       } catch (error) {
         console.error('Error fetching statistics:', error);
       }
@@ -198,8 +199,7 @@ const Products = () => {
     );
   };
 
-
-  const ProductForm = () => {
+ const ProductForm = () => {
     const [categories, setCategories] = useState([]);
     const [showProductModal, setShowProductModal] = useState(false);
     const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -401,10 +401,6 @@ const Products = () => {
       </div>
     );
   };
-  
-  
-  
-  
   
   const InventoryForm = ({ onClose }) => {
     const [productList, setProductList] = useState([]);
@@ -634,34 +630,37 @@ const Products = () => {
             <div className="total-items-count mx-2">■ Total-Items-{statisticsData.total_items}</div>
           </div>
           <div className="nearly-completed ">
-            <h6 className="mx-1 my-2">Nearly Completing </h6>
+            <h5 className="mx-1 my-2">Nearly Completing </h5>
             <div className="d-flex mx-3">
               <div className="product-count mx-2">Products-{statisticsData.nearly_sold_out_products}</div>
               <div className="items-count mx-2">Items-100</div>
             </div>
           </div>
           <div className="nearly-expiring ">
-            <h6 className="mx-1 my-2">Nearly Expiring </h6>
+            <h5 className="mx-1 my-2">Nearly Expiring </h5>
             <div className="d-flex mx-3">
               <div className="product-count mx-2">Products-{ statisticsData.nearly_expiring_products}</div>
               <div className="items-count mx-2">Items-100</div>
             </div>
-            <div className="m-2 text-danger"> Unverified items-{statisticsData.unverified_items} </div>
+            
           </div>
         </div>
         <div className="col-3">
-          <div className="mb-3 out-of-stocks">
-            <div className="instock-heading mx-2">Out of Stock</div>
+          <div className="mb-1 out-of-stocks">
+            <div className="instock-heading mx-2">Inventory</div>
             <hr />
-            <div className="">
-              <div className="product-count mx-2">Products-{statisticsData.out_of_stock}</div>
+            <div className="m-1 text-danger">
+            Haven't Add-{ statisticsData.Have_to_add.Total_stock}
             </div>
+            <div className="m-1 text-danger"> Unverified items-{statisticsData.unverified_items} </div>
+            <div className="product-count mx-2">Out of stock-{statisticsData.out_of_stock}</div>
           </div>
 
           <div className="expired">
-            <div className="instock-heading mx-2">Expires, Damages</div>
+          <div className="instock-heading mx-2">Expires and Damages</div>
             <hr />
             <div className="">
+            
               <div className="product-count mx-2">Products-{statisticsData.expired_products}</div>
               <div className="items-count mx-2">Items-{statisticsData.expired_items}</div>
             </div>

@@ -17,6 +17,15 @@ const Employees = () => {
   };
 
   const [Employees, setEmployees] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const selectedPositions = ["manager", "supervisor", "staff"];
+  const filteredEmployees = Employees.filter((employee) => {
+    const includesSearchQuery = employee.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const includesPosition = selectedPositions.includes(employee.status);
+    return includesSearchQuery && includesPosition;
+  });
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -103,6 +112,7 @@ const Employees = () => {
         // You can add additional logic or handle success as needed
         // Reset the form
         resetForm();
+        handleCloseModals();
       } catch (error) {
         console.error("Error adding employee record:", error);
         // Handle error, show error message, etc.
@@ -206,6 +216,8 @@ const Employees = () => {
               type="text"
               className="border-0"
               placeholder="Search Employees"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <div className="products-num-stats d-flex justify-content-around">
@@ -223,26 +235,29 @@ const Employees = () => {
         <div className="employee-list mx-3 w-100">
           <div className="managers w-100">
             <h2>Managers</h2>
-
-            {managers.map((employee) => (
-              <EmployeeProfile employee={employee} />
-            ))}
+            {filteredEmployees
+              .filter((employee) => employee.status === "manager")
+              .map((employee) => (
+                <EmployeeProfile key={employee.user_id} employee={employee} />
+              ))}
           </div>
 
           <div className="supervisors w-100">
             <h2>Supervisors</h2>
-            <ul>
-              {supervisors.map((employee) => (
-                <EmployeeProfile employee={employee} />
+            {filteredEmployees
+              .filter((employee) => employee.status === "supervisor")
+              .map((employee) => (
+                <EmployeeProfile key={employee.user_id} employee={employee} />
               ))}
-            </ul>
           </div>
 
           <div className="staff w-100">
             <h2>Staff</h2>
-            {staff.map((employee) => (
-              <EmployeeProfile employee={employee} />
-            ))}
+            {filteredEmployees
+              .filter((employee) => employee.status === "staff")
+              .map((employee) => (
+                <EmployeeProfile key={employee.user_id} employee={employee} />
+              ))}
           </div>
         </div>
       </div>
@@ -257,6 +272,7 @@ export function ActivitiesComponent() {
   const handleshowAssignTasks = () => setShowAssignTasks(true);
   const [showAssignTasks, setShowAssignTasks] = useState(false);
   const [employees, setEmployees] = useState([]);
+  const [run,setrun] = useState(false);
 
   const handleshowSeemore = () => setShowSeemore(true);
 
@@ -268,27 +284,55 @@ export function ActivitiesComponent() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/employees/');
+        const response = await axios.get("http://127.0.0.1:8000/employees/");
         const employeeData = response.data;
 
         // Set employees in the state
         setEmployees(employeeData);
 
-        axios.get('http://127.0.0.1:8000/duties/')
-          .then(response => setDutyData(response.data))
-          .catch(error => console.error('Error fetching duty data:', error));
-
+        axios
+          .get("http://127.0.0.1:8000/duties/")
+          .then((response) => setDutyData(response.data))
+          .catch((error) => console.error("Error fetching duty data:", error));
       } catch (error) {
-        console.error('Error fetching employees data:', error);
+        console.error("Error fetching employees data:", error);
       }
     };
 
     fetchEmployees();
-  }, []);
+  }, [run]);
+
+  const Workdone = async (id) => {
+    try {
+      // Fetch the existing record
+      const response = await axios.get(`http://127.0.0.1:8000/duties/${id}/`);
+      const existingData = response.data;
+  
+      // Update only the 'status' field
+      const updateData = {
+        ...existingData,
+        status: "completed",
+      };
+  
+      // Send the updated data back to the server
+      await axios.put(`http://127.0.0.1:8000/duties/${id}/`, updateData);
+  
+      console.log("Success");
+      setrun((prev) => !prev);
+    } catch (error) {
+      console.error("Error updating duty status:", error);
+      console.error("Response status:", error.response.status);
+      console.error("Response data:", error.response.data);
+      console.error("Response headers:", error.response.headers);
+    }
+  };
+  
+  
+  
 
   const Seemore = ({ show, handleClose }) => {
     return (
-      <Modal show={show} onHide={handleClose}>
+      <Modal size="lg" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Duties</Modal.Title>
         </Modal.Header>
@@ -305,7 +349,7 @@ export function ActivitiesComponent() {
               </tr>
             </thead>
             <tbody>
-              {dutyData.map(duty => (
+              {dutyData.filter(item => item.status==="pending").map((duty) => (
                 <tr key={duty.id}>
                   <td>{duty.id}</td>
                   <td>{duty.staff_cat}</td>
@@ -313,7 +357,9 @@ export function ActivitiesComponent() {
                   <td>{duty.status}</td>
                   <td>{duty.deadline}</td>
                   <td>{duty.employee}</td>
+                  <td><Button variant="primary" onClick={()=>Workdone(duty.id)}>Done</Button></td>
                 </tr>
+                
               ))}
             </tbody>
           </Table>
@@ -322,9 +368,7 @@ export function ActivitiesComponent() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary">
-            Save Changes
-          </Button>
+          <Button variant="primary">Save Changes</Button>
         </Modal.Footer>
       </Modal>
     );
@@ -332,29 +376,35 @@ export function ActivitiesComponent() {
 
   const AssignTasks = ({ show, handleClose, employees }) => {
     const initialValues = {
-      work: '',
-      employee: '',
-      deadline: '',
+      work: "",
+      employee: "",
+      deadline: "",
     };
-  
+
     const validationSchema = Yup.object().shape({
-      work: Yup.string().required('Work description is required'),
-      employee: Yup.string().required('Employee is required'),
-      deadline: Yup.date().required('Deadline is required').min(new Date(), 'Deadline must be in the future'),
+      work: Yup.string().required("Work description is required"),
+      employee: Yup.string().required("Employee is required"),
+      deadline: Yup.date()
+        .required("Deadline is required")
+        .min(new Date(), "Deadline must be in the future"),
     });
-  
-    const onSubmit = (values, { resetForm }) => {
-      // Assuming you're using Axios or any other library for making API requests
-      // Replace the following code with your actual API request
-      console.log('Form values:', values);
-  
-      // Reset the form
-      resetForm();
-  
-      // Close the modal
-      handleClose();
+
+    const onSubmit = async (values, { resetForm }) => {
+      try {
+        // Perform API request to add duty record
+        await axios.post("http://127.0.0.1:8000/duties/", values);
+
+        // Reset the form
+        resetForm();
+
+        // Close the modal
+        handleClose();
+      } catch (error) {
+        console.error("Error adding duty record:", error);
+        // Handle error, show error message, etc.
+      }
     };
-  
+
     return (
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -368,43 +418,55 @@ export function ActivitiesComponent() {
           >
             <Form>
               <div className="mb-3">
-                <label htmlFor="work" className="form-label">Work Description</label>
+                <label htmlFor="work" className="form-label">
+                  Work Description
+                </label>
                 <Field
                   as="textarea"
                   name="work"
                   rows={3}
                   className="form-control"
                 />
-                <ErrorMessage name="work" component="div" className="invalid-feedback" />
+                <ErrorMessage
+                  name="work"
+                  component="div"
+                  className="invalid-feedback"
+                />
               </div>
-  
+
               <div className="mb-3">
-                <label htmlFor="employee" className="form-label">Employee</label>
-                <Field
-                  as="select"
-                  name="employee"
-                  className="form-control"
-                >
-                  <option value="" disabled>Select an employee</option>
+                <label htmlFor="employee" className="form-label">
+                  Employee
+                </label>
+                <Field as="select" name="employee" className="form-control">
+                  <option value="" disabled>
+                    Select an employee
+                  </option>
                   {employees.map((employee) => (
                     <option key={employee.user_id} value={employee.user_id}>
                       {employee.name}
                     </option>
                   ))}
                 </Field>
-                <ErrorMessage name="employee" component="div" className="invalid-feedback" />
-              </div>
-  
-              <div className="mb-3">
-                <label htmlFor="deadline" className="form-label">Deadline</label>
-                <Field
-                  type="date"
-                  name="deadline"
-                  className="form-control"
+                <ErrorMessage
+                  name="employee"
+                  component="div"
+                  className="invalid-feedback"
                 />
-                <ErrorMessage name="deadline" component="div" className="invalid-feedback" />
               </div>
-  
+
+              <div className="mb-3">
+                <label htmlFor="deadline" className="form-label">
+                  Deadline
+                </label>
+                <Field type="date" name="deadline" className="form-control" />
+                <ErrorMessage
+                  name="deadline"
+                  component="div"
+                  className="invalid-feedback"
+                />
+              </div>
+
               <div className="mb-3">
                 <Button variant="secondary" onClick={handleClose}>
                   Close
@@ -419,7 +481,6 @@ export function ActivitiesComponent() {
       </Modal>
     );
   };
-  
 
   return (
     <div className="">
@@ -433,7 +494,7 @@ export function ActivitiesComponent() {
           </tr>
         </thead>
         <tbody>
-          {dutyData.slice(0, 4).map(duty => (
+          {dutyData.filter(item => item.status==="pending").slice(0, 4).map((duty) => (
             <tr key={duty.id}>
               <td>{duty.employee}</td>
               <td>{duty.work}</td>
@@ -444,11 +505,17 @@ export function ActivitiesComponent() {
       {/* Add your performance charts here */}
       {/* Example: <PerformanceCharts /> */}
       <div className="d-flex m-2">
-        <Button className="mx-3" onClick={handleshowSeemore}>See More</Button>
+        <Button className="mx-3" onClick={handleshowSeemore}>
+          See More
+        </Button>
         <Button onClick={handleshowAssignTasks}>Assign a task</Button>
       </div>
       <Seemore show={showSeemore} handleClose={handleCloseModals} />
-      <AssignTasks show={showAssignTasks} handleClose={handleCloseModals} employees={employees} />
+      <AssignTasks
+        show={showAssignTasks}
+        handleClose={handleCloseModals}
+        employees={employees}
+      />
     </div>
   );
 }
@@ -492,9 +559,9 @@ export function PerformanceCOmponent() {
       </div>
       <div className="col-12  ">
         <ul className="d-flex justify-content-around px-2">
-          <li>High performances: {highPerformanceCount}</li>
-          <li>Medium: {mediumPerformanceCount}</li>
           <li>Low: {lowPerformanceCount}</li>
+          <li>Medium: {mediumPerformanceCount}</li>
+          <li>High performances: {highPerformanceCount}</li>
         </ul>
       </div>
     </div>

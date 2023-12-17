@@ -110,8 +110,11 @@ def Statistics(request):
     # Grouped count of items by category
     items_by_category = ProductItem.objects.values('product__product_category__name').annotate(item_count=Count('id'))
 
+    Have_to_add = Inventory.objects.filter(stock_status='have to add').values('stock_status').aggregate(Total_stock=Sum('purchased_stock'))
+
     return Response({
         'total_categories': total_categories,
+        "Have_to_add":Have_to_add,
         'total_products': total_products,
         'total_items': total_items,
         "out_of_stock":out_of_stock,
@@ -125,6 +128,7 @@ def Statistics(request):
         "unverified_items":unverified_items,
         'items_by_product': items_by_product,
         'items_by_category': items_by_category,
+        
     })
 
 @api_view(['GET'])
@@ -407,6 +411,14 @@ def Monthwise_data(request):
 
         return Response({'monthly_data': result})
 
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+@api_view(['GET'])
+def Order_sales(request,order_id=1):
+    try:
+        Orders_sales = Sale.objects.filter(order_id=order_id).values()
+        return Response({'Orders_sales': Orders_sales})
     except Exception as e:
         return Response({'error': str(e)}, status=500)
 

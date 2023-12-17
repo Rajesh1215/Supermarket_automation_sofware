@@ -37,7 +37,7 @@ const Owner = () => {
             <Route path="/customers" element={<Customers />} />
             <Route path="/customers/customer-details" element={<CustomerPage />} />
             <Route path="/sales" element={<Sales />} />
-            <Route path="/sales/orders" element={<Orders />} />
+            <Route path="/sales/orders/:order_id" element={<Orders />} />
             <Route path="/sales/returns" element={<Returns />} />
             <Route path="/reports" element={<Reports />} />
           </Routes>
