@@ -35,6 +35,7 @@ const Login = () => {
           username,
           password,
           role: userStatus,
+          id:response.data.user_id,
         });
   
         switch (userStatus) {

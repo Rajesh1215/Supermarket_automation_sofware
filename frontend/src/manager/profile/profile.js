@@ -1,47 +1,102 @@
-import React from "react";
-import "./profile.css"
-const Profile = () => {
-  return (
-    <div className="profile-main-container">
-      <div className="profile-performance d-flex flex-wrap justify-content-between">
-        <div className="profile">
-        <img src="https://via.placeholder.com/150x150" alt="hi" />
-          <div className="profile-info">
-            <h2>John Doe</h2>
-            <p>Software Engineer</p>
-            <p>john.doe@example.com</p>
-          </div>
-        </div>
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Row, Col, Card } from 'react-bootstrap';
+import {useUserContext} from '../../data/data'
 
-        <div className="performance">
-          <h2>Performance Highlights</h2>
+
+const Profile = () => {
+  const [employeeData, setEmployeeData] = useState(null);
+  const [employeeDuties, setEmployeeDuties] = useState([]);
+  const {User}=useUserContext()
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/employees/${User.id}`);
+        setEmployeeData(response.data);
+      } catch (error) {
+        console.error('Error fetching employee data:', error);
+      }
+    };
+
+    const fetchDuties = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/duties/');
+        setEmployeeDuties(response.data);
+      } catch (error) {
+        console.error('Error fetching duties data:', error);
+      }
+    };
+
+    fetchEmployeeData();
+    fetchDuties();
+  }, [User.id]);
+
+  const completedTasks = employeeDuties.filter(duty => duty.employee === parseInt(User.id) && duty.status === 'completed');
+  const pendingTasks = employeeDuties.filter(duty => duty.employee === parseInt(User.id) && duty.status === 'pending');
+  const incompleteTasks = employeeDuties.filter(duty => duty.employee === parseInt(User.id) && duty.status !== 'completed' && duty.status !== 'pending');
+
+  return (
+    <div className="my-3">
+      {employeeData ? (
+        <Row className="mb-5">
+          <Col md={4}>
+            <Card>
+              <Card.Img variant="top" src="https://via.placeholder.com/400" />
+              <Card.Body>
+                <Card.Title>{employeeData.name}</Card.Title>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={4} className="mt-3">
+            <h2>Details</h2>
+            <p>Username: {employeeData.username}</p>
+            <p>Email: {employeeData.mail_id}</p>
+            <p>Date of Birth: {employeeData.dob}</p>
+            <p>Date of Joining: {employeeData.date_of_join}</p>
+            <p>Password: {employeeData.password}</p>
+            <p>Performance: {employeeData.performance}</p>
+            <p>Status: {employeeData.status}</p>
+          </Col>
+        </Row>
+      ) : (
+        <p>Loading employee data...</p>
+      )}
+
+      {/* Works Assigned Section */}
+      <div className="works-assigned mx-2 mt-5 pt-2 pb-4 px-3 shadow rounded">
+        <h3>Works Assigned</h3>
+        <hr />
+        <div>
+          <h4>Completed Tasks</h4>
           <ul>
-            <li>Received an "Exceeds Expectations" performance rating in the last review</li>
-            <li>Successfully completed two major projects on time and within budget</li>
-            <li>Consistently exceeded individual sales targets</li>
+            {completedTasks.map(task => (
+              <li key={task.id}>{task.work}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4>Pending Tasks</h4>
+          <ul>
+            {pendingTasks.map(task => (
+              <li key={task.id}>{task.work}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4>Incomplete Tasks</h4>
+          <ul>
+            {incompleteTasks.map(task => (
+              <li key={task.id}>{task.work}</li>
+            ))}
           </ul>
         </div>
       </div>
 
-      <div className="alldetails-community d-flex flex-wrap justify-content-between">
-        <div className="alldetails">
-          <h2>Employee Details</h2>
-          <ul>
-            <li>Department: Engineering</li>
-            <li>Location: New York</li>
-            <li>Start Date: 2020-01-01</li>
-            <li>Manager: Jane Smith</li>
-          </ul>
-        </div>
-
-        <div className="community">
-          <h2>Employee Community Engagement</h2>
-          <ul>
-            <li>Member of the company's softball team</li>
-            <li>Volunteer for the company's charity events</li>
-            <li>Participates in regular company social gatherings</li>
-          </ul>
-        </div>
+      {/* Works Completed Section */}
+      <div className="works-assigned m-2 pb-4 pt-2 px-3 shadow rounded">
+        <h3>Works Completed</h3>
+        <hr />
+        {/* Display works completed content here */}
       </div>
     </div>
   );

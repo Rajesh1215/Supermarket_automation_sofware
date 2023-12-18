@@ -17,8 +17,20 @@ import ProductDetailsExample from "./products/product_det"
 import Community from './employees/community';
 import CustomerPage from './customers/customer_det';
 import { Container, Row, Col } from 'react-bootstrap';
+import { useUserContext } from '../data/data';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
 
 const Owner = () => {
+
+  const {User}=useUserContext();
+  const navigate=useNavigate();
+  useEffect(() => {
+    if (User.username === '' || User.role !== 'owner') {
+      navigate('/');
+    }
+  });
   return (
     <Container fluid>
       <Row>

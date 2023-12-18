@@ -284,9 +284,9 @@ export function OrderListComponent() {
             <div className="items-count mx-2">
               Cost price :{metrics.today_orders_cost_price}
             </div>
-            <div className="items-count mx-2">
+            {/* <div className="items-count mx-2">
               Profit :{metrics.today_orders_profit_price}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -319,6 +319,7 @@ export function StockChart() {
 
     fetchData();
   }, []);
+  console.log(categoryNames)
 
   return (
     <>
@@ -329,7 +330,7 @@ export function StockChart() {
             categoryName: categoryNames.find(
               (category) =>
                 category.product_category_id ===
-                item.product__product__product_category
+                item.product__product_category
             )?.name,
           }))}
         />

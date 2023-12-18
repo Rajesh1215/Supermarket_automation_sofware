@@ -7,8 +7,22 @@ import Sidebar from './sidebar';
 import { Container, Row, Col } from 'react-bootstrap';
 import Returns from './sales/returns';
 import ProductDetailsExample from './products/product_det';
+import { useUserContext } from '../data/data';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
+
 
 const Staff = () => {
+
+  const {User}=useUserContext();
+  const navigate=useNavigate();
+  useEffect(() => {
+    if (User.username === '' || User.role !== 'staff') {
+      navigate('/');
+    }
+  });
+
   return (
       <Container fluid>
         <Row>

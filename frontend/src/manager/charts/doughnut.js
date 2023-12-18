@@ -73,7 +73,7 @@ export const DoughnutChartProCatogary = ({ itemsByCategory }) => {
   if (!itemsByCategory || !itemsByCategory.length) {
     return <div>No data available</div>;
   }
-
+  
   // Extracting labels and data from props
   const labels = itemsByCategory.map(
     (item) => `${item.product__product_category__name}`

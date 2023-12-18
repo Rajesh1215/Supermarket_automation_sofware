@@ -17,9 +17,20 @@ import ProductDetailsExample from "./products/product_det"
 import Community from './employees/community';
 import CustomerPage from './customers/customer_det';
 import { Container, Row, Col } from 'react-bootstrap';
-import Profile from './profile/profile';
+import { useUserContext } from '../data/data';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import Profile from "./profile/profile";
 
 const Manager = () => {
+  const {User}=useUserContext();
+  const navigate=useNavigate();
+  useEffect(() => {
+    if (User.username === '' || User.role !== 'manager') {
+      navigate('/');
+    }
+  });
+  
   return (
     <Container fluid>
       <Row>
@@ -32,7 +43,7 @@ const Manager = () => {
             <Route path="/products" element={<Products />} />
             <Route path="/products/catogaries" element={<Allproducts />} />
             <Route path="/products/catogaries/product_details/:product_id" element={<ProductDetailsExample />} />
-            <Route path="/employees" element={<Employees />} /> {/* Add the forward slash here */}
+            <Route path="/employees" element={<Employees />} />
             <Route path="/employees/employee-details/:employee_id" element={<EmployeeDetails />} />
             <Route path="/community" element={<Community />} />
             <Route path="/customers" element={<Customers />} />

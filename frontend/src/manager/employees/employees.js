@@ -167,9 +167,7 @@ const Employees = () => {
                   <option value="" disabled>
                     Select a status
                   </option>
-                  <option value="owner">Owner</option>
                   <option value="staff">Staff</option>
-                  <option value="manager">Manager</option>
                   <option value="supervisor">Supervisor</option>
                 </Field>
                 <ErrorMessage name="status" component="div" />
@@ -349,7 +347,7 @@ export function ActivitiesComponent() {
               </tr>
             </thead>
             <tbody>
-              {dutyData.filter(item => item.status==="pending").map((duty) => (
+              {dutyData.filter(item => item.status==="pending" && item.staff_cat !=='owner').map((duty) => (
                 <tr key={duty.id}>
                   <td>{duty.id}</td>
                   <td>{duty.staff_cat}</td>
@@ -442,7 +440,7 @@ export function ActivitiesComponent() {
                   <option value="" disabled>
                     Select an employee
                   </option>
-                  {employees.map((employee) => (
+                  {employees.filter((em)=>em.status==='supervisor' || em.status==='staff').map((employee) => (
                     <option key={employee.user_id} value={employee.user_id}>
                       {employee.name}
                     </option>
@@ -494,7 +492,7 @@ export function ActivitiesComponent() {
           </tr>
         </thead>
         <tbody>
-          {dutyData.filter(item => item.status==="pending").slice(0, 4).map((duty) => (
+          {dutyData.filter(item => item.status==="pending" && item.staff_cat !=='owner').slice(0, 4).map((duty) => (
             <tr key={duty.id}>
               <td>{duty.employee}</td>
               <td>{duty.work}</td>

@@ -312,7 +312,7 @@ def Calculate_metrics(request):
         )['today_cost_price'] or Decimal(0)
 
         # Calculate total profit price for today's orders
-        today_profit_price = today_cost_price - today_revenue
+        today_profit_price = today_revenue- today_cost_price 
 
         # Filter product items for unsold and expired items
         productitems = ProductItem.objects.filter(
@@ -440,7 +440,7 @@ class LoginView(APIView):
             # Check if the provided password matches the stored password
             if password == user.password:
                 # Password is correct, return user's status (role)
-                return Response({'status': user.status}, status=status.HTTP_200_OK)
+                return Response({'status': user.status,"user_id":user.user_id}, status=status.HTTP_200_OK)
             else:
                 # Password is incorrect
                 return Response({'error': 'Invalid username or password'})

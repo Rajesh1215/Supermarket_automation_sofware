@@ -14,7 +14,7 @@ const Employees = () => {
 
   const [Employees, setEmployees] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const selectedPositions = ["manager", "supervisor", "staff"];
+  const selectedPositions = [ "supervisor", "staff"];
   const filteredEmployees = Employees.filter((employee) => {
     const includesSearchQuery = employee.name
       .toLowerCase()
@@ -70,122 +70,8 @@ const Employees = () => {
       </div>
     );
   };
-  const [showAddEmployee, setShowAddEmployee] = useState(false);
 
-  const handleshowAddEmployee = () => setShowAddEmployee(true);
 
-  const handleCloseModals = () => {
-    setShowAddEmployee(false);
-  };
-
-  const AddEmployee = () => {
-    const initialValues = {
-      username: "",
-      name: "",
-      dob: "",
-      mail_id: "",
-      password: "",
-      status: "",
-      performance: 60, // Assuming a default value for performance
-      date_of_join: "",
-    };
-
-    const validationSchema = Yup.object({
-      username: Yup.string().required("Required"),
-      name: Yup.string().required("Required"),
-      dob: Yup.date().required("Required"),
-      mail_id: Yup.string().email("Invalid email address").required("Required"),
-      password: Yup.string().required("Required"),
-      status: Yup.string().required("Required"),
-      date_of_join: Yup.date().required("Required"),
-    });
-
-    const onSubmit = async (values, { resetForm }) => {
-      try {
-        // Perform API request to add employee record
-        await axios.post("http://127.0.0.1:8000/employees/", values);
-
-        // You can add additional logic or handle success as needed
-        // Reset the form
-        resetForm();
-        handleCloseModals();
-      } catch (error) {
-        console.error("Error adding employee record:", error);
-        // Handle error, show error message, etc.
-      }
-    };
-
-    return (
-      <Modal show={showAddEmployee} onHide={handleCloseModals}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Employee</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-          >
-            <Form>
-              <div>
-                <label htmlFor="username">Username:</label>
-                <Field type="text" id="username" name="username" />
-                <ErrorMessage name="username" component="div" />
-              </div>
-
-              <div>
-                <label htmlFor="name">Name:</label>
-                <Field type="text" id="name" name="name" />
-                <ErrorMessage name="name" component="div" />
-              </div>
-
-              <div>
-                <label htmlFor="dob">Date of Birth:</label>
-                <Field type="date" id="dob" name="dob" />
-                <ErrorMessage name="dob" component="div" />
-              </div>
-
-              <div>
-                <label htmlFor="mail_id">Email:</label>
-                <Field type="email" id="mail_id" name="mail_id" />
-                <ErrorMessage name="mail_id" component="div" />
-              </div>
-
-              <div>
-                <label htmlFor="password">Password:</label>
-                <Field type="password" id="password" name="password" />
-                <ErrorMessage name="password" component="div" />
-              </div>
-
-              <div>
-                <label htmlFor="status">Status:</label>
-                <Field as="select" id="status" name="status">
-                  <option value="" disabled>
-                    Select a status
-                  </option>
-                  <option value="owner">Owner</option>
-                  <option value="staff">Staff</option>
-                  <option value="manager">Manager</option>
-                  <option value="supervisor">Supervisor</option>
-                </Field>
-                <ErrorMessage name="status" component="div" />
-              </div>
-
-              <div>
-                <label htmlFor="date_of_join">Date of Join:</label>
-                <Field type="date" id="date_of_join" name="date_of_join" />
-                <ErrorMessage name="date_of_join" component="div" />
-              </div>
-
-              <div>
-                <button type="submit">Submit</button>
-              </div>
-            </Form>
-          </Formik>
-        </Modal.Body>
-      </Modal>
-    );
-  };
 
   return (
     <div className="employees-main-container">
@@ -202,7 +88,6 @@ const Employees = () => {
       <div className="">
         <div className="d-flex mt-5 mx-5 justify-content-between border-0 ">
           <h4>Employees</h4>
-          <Button onClick={handleshowAddEmployee}>Add Employee</Button>
         </div>
         <hr />
         <div className="search-component d-flex justify-content-between ">
@@ -229,14 +114,6 @@ const Employees = () => {
           </div>
         </div>
         <div className="employee-list mx-3 w-100">
-          <div className="managers w-100">
-            <h2>Managers</h2>
-            {filteredEmployees
-              .filter((employee) => employee.status === "manager")
-              .map((employee) => (
-                <EmployeeProfile key={employee.user_id} employee={employee} />
-              ))}
-          </div>
 
           <div className="supervisors w-100">
             <h2>Supervisors</h2>
@@ -257,7 +134,6 @@ const Employees = () => {
           </div>
         </div>
       </div>
-      <AddEmployee show={showAddEmployee} handleClose={handleCloseModals} />
     </div>
   );
 };
@@ -345,7 +221,7 @@ export function ActivitiesComponent() {
               </tr>
             </thead>
             <tbody>
-              {dutyData.filter(item => item.status==="pending").map((duty) => (
+              {dutyData.filter(item => item.status==="pending" && item.staff_cat === "staff"  ).map((duty) => (
                 <tr key={duty.id}>
                   <td>{duty.id}</td>
                   <td>{duty.staff_cat}</td>
@@ -438,7 +314,7 @@ export function ActivitiesComponent() {
                   <option value="" disabled>
                     Select an employee
                   </option>
-                  {employees.map((employee) => (
+                  {employees.filter((em)=>em.status === 'staff').map((employee) => (
                     <option key={employee.user_id} value={employee.user_id}>
                       {employee.name}
                     </option>
@@ -490,7 +366,7 @@ export function ActivitiesComponent() {
           </tr>
         </thead>
         <tbody>
-          {dutyData.filter(item => item.status==="pending").slice(0, 4).map((duty) => (
+          {dutyData.filter(item => item.status==="pending" && item.staff_cat === "staff"  ).slice(0, 4).map((duty) => (
             <tr key={duty.id}>
               <td>{duty.employee}</td>
               <td>{duty.work}</td>
