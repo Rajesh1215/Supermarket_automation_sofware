@@ -462,6 +462,7 @@ def Make_order(request):
 
         # Assuming the form fields are sent as an array named 'orderItems'
         order_items = data.get('orderItems', [])
+        customer = data.get('customer', )
 
         # Step 1: Set 'sold' to True for each ProductItem in the list
         for item in order_items:
@@ -473,7 +474,7 @@ def Make_order(request):
 
         # Step 2: Count the number of products based on all ProductItem instances in the list
         total_quantity = len(order_items)
-        order = Order.objects.create(total_price=0, customer_id=0, created_at=timezone.now())
+        order = Order.objects.create(total_price=0, customer_id=customer, created_at=timezone.now())
         latest_order = Order.objects.latest('order_id')
 
         # Step 3: Create records in the Sale model for each product

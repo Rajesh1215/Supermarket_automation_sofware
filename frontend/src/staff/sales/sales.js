@@ -15,6 +15,7 @@ const Sales = () => {
   const [endDate, setEndDate] = useState("");
   const [customers, setCustomers] = useState({});
   const navigate = useNavigate();
+  const[ERRORMSG,SETERRORMSG]=useState('');
 
   useEffect(() => {
     const fetchDataOrders = async () => {
@@ -63,11 +64,11 @@ const Sales = () => {
   const handleClose = () => setShowModal(false);
 
   const MakeOrderModal = ({ showModal, handleClose }) => {
-    const initialValues = { orderItems: [{ productItemId: '' }] };
+    const initialValues = { orderItems: [{ productItemId: '' }],customer:0 };
   
     const validationSchema = Yup.object().shape({
       orderItems: Yup.array().of(
-        Yup.object().shape({
+        Yup.object().shape({ 
           productItemId: Yup.string().required('Product Item ID is required'),
         })
       ),
@@ -83,15 +84,18 @@ const Sales = () => {
       updatedItems.splice(index, 1);
       form.setFieldValue('orderItems', updatedItems);
     };
+    
   
     const handleBuy = async (values) => {
       console.log(values);
       try {
-        const response = await axios.post("http://127.0.0.1:8000/make_order/", { orderItems: values.orderItems });
+        const response = await axios.post("http://127.0.0.1:8000/make_order/", { orderItems: values.orderItems,customer:values.customer });
         console.log('Response from server:', response.data);
         handleClose();
+        SETERRORMSG('');
       } catch (error) {
         console.error('Error while making a purchase:', error.message);
+        SETERRORMSG(error.message);
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
@@ -123,6 +127,12 @@ const Sales = () => {
           >
             {(formikProps) => (
               <FormikForm>
+                <Form.Label>Customer:</Form.Label>
+                <Field
+                        type="number"
+                        name={`customer`}
+                        placeholder="Enter customer name"
+                      />
                 {formikProps.values.orderItems.map((item, index) => (
                   <div key={index} className="mb-3">
                     <Form.Group>
@@ -153,6 +163,7 @@ const Sales = () => {
                 <Button variant="primary" type="submit">
                   Buy
                 </Button>
+                <div className="text-danger">{ERRORMSG}</div>
               </FormikForm>
             )}
           </Formik>
