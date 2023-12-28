@@ -69,7 +69,8 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className='heightfull w-100  blurring'  >
+    <div className="login-container shadow rounded" style={{ backgroundColor:'white' }}>
       <h2>Login</h2>
       <Form onSubmit={handleLogin}>
         <Form.Group controlId="username">
@@ -94,10 +95,11 @@ const Login = () => {
           />
         </Form.Group>
         {error}
-        <Button variant="primary" type="submit">
+        <Button variant="primary" className='my-2' type="submit">
           Login
         </Button>
       </Form>
+    </div>
     </div>
   );
 };
