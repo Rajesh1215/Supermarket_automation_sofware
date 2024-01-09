@@ -10,6 +10,7 @@ import ProductDetailsExample from './products/product_det';
 import { useUserContext } from '../data/data';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Orders from './sales/orders';
 
 
 
@@ -36,6 +37,7 @@ const Staff = () => {
               <Route path="/products/product_details/:product_id" element={<ProductDetailsExample />} />
               <Route path="/sales" element={<Sales />} />
               <Route path="/sales/returns" element={<Returns />} />
+              <Route path="/sales/orders/:order_id" element={<Orders />} />
             </Routes>
           </Col>
         </Row>
